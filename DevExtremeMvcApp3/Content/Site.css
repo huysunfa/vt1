@@ -1,0 +1,23 @@
+﻿ 
+
+.dx-datagrid-headers {
+    color: #fff!important;
+  
+    background-color: #009688!important;
+}
+
+.card-body {
+     padding: 5px!important ;
+}
+.content {
+    margin-top: 5px !important
+}
+body {
+    background-color: #f4f6f9!important;
+}
+.sidebar-dark-primary .sidebar a {
+    color: #ffffff!important;
+}
+.nav-link{
+    padding:13px!important;font-weight:normal
+}

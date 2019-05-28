@@ -1,0 +1,42 @@
+@(Html.DevExtreme().DataGrid<DevExtremeMvcApp3.Models.Currency>()
+        .DataSource(ds => ds.WebApi()
+            .RouteName("CurrenciesAPIApi")
+           .LoadAction("Get")
+            .InsertAction("Post")
+            .UpdateAction("Put")
+            .DeleteAction("Delete")
+            .Key("CurrencyId")
+        )
+        .RemoteOperations(true)
+        .Columns(columns =>
+        {
+
+            columns.AddFor(m => m.CurrencyId).AllowEditing(false);
+
+            columns.AddFor(m => m.CurrencyCode);
+
+            columns.AddFor(m => m.CurrencyName);
+
+            columns.AddFor(m => m.Description);
+        }).Editing(e => e.Mode(GridEditMode.Popup)
+  .AllowAdding(true)
+  .AllowUpdating(true)
+  .AllowDeleting(true)
+            ).Paging(p => p.PageSize(10))
+        .FilterRow(f => f.Visible(true))
+        .HeaderFilter(f => f.Visible(true))
+        .GroupPanel(p => p.Visible(true))
+        .Grouping(g => g.AutoExpandAll(false))
+        .RemoteOperations(true)
+        .Scrolling(scrolling => scrolling.ColumnRenderingMode(GridColumnRenderingMode.Virtual))
+        .Summary(s => s
+            .TotalItems(totalItems =>
+            {
+                totalItems.AddFor(m => m.CurrencyId).SummaryType(SummaryType.Count);
+            })
+            .GroupItems(groupItems =>
+            {
+                groupItems.Add().SummaryType(SummaryType.Count);
+            })
+        )
+)

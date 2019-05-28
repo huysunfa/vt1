@@ -1,0 +1,40 @@
+@(Html.DevExtreme().DataGrid<DevExtremeMvcApp3.Models.ProductType>()
+        .DataSource(ds => ds.WebApi()
+            .RouteName("ProductTypesAPIApi")
+           .LoadAction("Get")
+            .InsertAction("Post")
+            .UpdateAction("Put")
+            .DeleteAction("Delete")
+            .Key("ProductTypeId")
+        )
+        .RemoteOperations(true)
+        .Columns(columns =>
+        {
+
+            columns.AddFor(m => m.ProductTypeId);
+
+            columns.AddFor(m => m.Description);
+
+            columns.AddFor(m => m.ProductTypeName);
+        }).Editing(e => e.Mode(GridEditMode.Popup)
+  .AllowAdding(true)
+  .AllowUpdating(true)
+  .AllowDeleting(true)
+            ).Paging(p => p.PageSize(10))
+        .FilterRow(f => f.Visible(true))
+        .HeaderFilter(f => f.Visible(true))
+        .GroupPanel(p => p.Visible(true))
+        .Grouping(g => g.AutoExpandAll(false))
+        .RemoteOperations(true)
+        .Scrolling(scrolling => scrolling.ColumnRenderingMode(GridColumnRenderingMode.Virtual))
+        .Summary(s => s
+            .TotalItems(totalItems =>
+            {
+                totalItems.AddFor(m => m.ProductTypeId).SummaryType(SummaryType.Count);
+            })
+            .GroupItems(groupItems =>
+            {
+                groupItems.Add().SummaryType(SummaryType.Count);
+            })
+        )
+)
