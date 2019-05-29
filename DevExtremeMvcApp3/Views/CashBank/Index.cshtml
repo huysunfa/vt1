@@ -1,3 +1,8 @@
+@{
+    string PageName = MainMenu.CashBank.PageName;
+}
+<div class="long-title"><h3>Danh sách @PageName</h3></div>
+
 @(Html.DevExtreme().DataGrid<DevExtremeMvcApp3.Models.CashBank>()
         .DataSource(ds => ds.WebApi()
             .RouteName("CashBanksAPIApi")
@@ -11,7 +16,7 @@
         .Columns(columns =>
         {
 
-            columns.AddFor(m => m.CashBankId);
+ 
 
             columns.AddFor(m => m.CashBankName);
 

@@ -1,48 +1,52 @@
+@{
+    string PageName = MainMenu.PaymentReceive.PageName;
+}
+<div class="long-title"><h3>Danh sách @PageName</h3></div>
+
 @(Html.DevExtreme().DataGrid<DevExtremeMvcApp3.Models.PaymentReceive>()
-        .DataSource(ds => ds.WebApi()
-            .RouteName("PaymentReceivesAPIApi")
-           .LoadAction("Get")
-            .InsertAction("Post")
-            .UpdateAction("Put")
-            .DeleteAction("Delete")
-            .Key("PaymentReceiveId")
-        )
-        .RemoteOperations(true)
-        .Columns(columns =>
-        {
+.DataSource(ds => ds.WebApi()
+.RouteName("PaymentReceivesAPIApi")
+.LoadAction("Get")
+.InsertAction("Post")
+.UpdateAction("Put")
+.DeleteAction("Delete")
+.Key("PaymentReceiveId")
+)
+.RemoteOperations(true)
+.Columns(columns =>
+{
+ 
 
-            columns.AddFor(m => m.PaymentReceiveId);
+columns.AddFor(m => m.InvoiceId);
 
-            columns.AddFor(m => m.InvoiceId);
+columns.AddFor(m => m.IsFullPayment);
 
-            columns.AddFor(m => m.IsFullPayment);
+columns.AddFor(m => m.PaymentAmount);
 
-            columns.AddFor(m => m.PaymentAmount);
+columns.AddFor(m => m.PaymentDate);
 
-            columns.AddFor(m => m.PaymentDate);
+columns.AddFor(m => m.PaymentReceiveName);
 
-            columns.AddFor(m => m.PaymentReceiveName);
-
-            columns.AddFor(m => m.PaymentTypeId);
-        }).Editing(e => e.Mode(GridEditMode.Popup)
-  .AllowAdding(true)
-  .AllowUpdating(true)
-  .AllowDeleting(true)
-            ).Paging(p => p.PageSize(10))
-        .FilterRow(f => f.Visible(true))
-        .HeaderFilter(f => f.Visible(true))
-        .GroupPanel(p => p.Visible(true))
-        .Grouping(g => g.AutoExpandAll(false))
-        .RemoteOperations(true)
-        .Scrolling(scrolling => scrolling.ColumnRenderingMode(GridColumnRenderingMode.Virtual))
-        .Summary(s => s
-            .TotalItems(totalItems =>
-            {
-                totalItems.AddFor(m => m.PaymentReceiveId).SummaryType(SummaryType.Count);
-            })
-            .GroupItems(groupItems =>
-            {
-                groupItems.Add().SummaryType(SummaryType.Count);
-            })
-        )
+columns.AddFor(m => m.PaymentTypeId);
+}).Editing(e => e.Mode(GridEditMode.Popup)
+.AllowAdding(true)
+.AllowUpdating(true)
+.AllowDeleting(true)
+).Paging(p => p.PageSize(10))
+.FilterRow(f => f.Visible(true))
+.HeaderFilter(f => f.Visible(true))
+.GroupPanel(p => p.Visible(true))
+.Grouping(g => g.AutoExpandAll(false))
+.RemoteOperations(true)
+.Scrolling(scrolling => scrolling.ColumnRenderingMode(GridColumnRenderingMode.Virtual))
+.Summary(s => s
+.TotalItems(totalItems =>
+{
+totalItems.AddFor(m => m.PaymentReceiveId).SummaryType(SummaryType.Count);
+})
+.GroupItems(groupItems =>
+{
+groupItems.Add().SummaryType(SummaryType.Count);
+})
+)
 )

@@ -37,9 +37,11 @@ namespace DevExtremeMvcApp3 {
 
             // DevExtreme + extensions
             scriptBundle
+                  .Include("~/Scripts/jszip.min.js")
                 .Include("~/Scripts/dx.all.js")
                 .Include("~/Scripts/aspnet/dx.aspnet.data.js")
-                .Include("~/Scripts/aspnet/dx.aspnet.mvc.js");
+                .Include("~/Scripts/aspnet/dx.aspnet.mvc.js")
+              ;
 
             // dxVectorMap data (http://js.devexpress.com/Documentation/Guide/Data_Visualization/VectorMap/Providing_Data/#Data_for_Areas)
             //scriptBundle

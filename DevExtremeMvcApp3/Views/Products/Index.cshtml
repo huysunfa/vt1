@@ -16,7 +16,7 @@
         .Columns(columns =>
         {
 
-            columns.AddFor(m => m.ProductId).Width(150);
+        
 
             columns.AddFor(m => m.Barcode).Width(150);
 
@@ -44,11 +44,12 @@
             .AllowDeleting(true)
         ).Paging(p => p.PageSize(10))
     .FilterRow(f => f.Visible(true))
-    .HeaderFilter(f => f.Visible(true))
+    .Export(e => e.Enabled(true).FileName(MainMenu.Product.PageName).AllowExportSelectedData(true))
+   .HeaderFilter(f => f.Visible(true))
     .GroupPanel(p => p.Visible(true))
     .Grouping(g => g.AutoExpandAll(false))
     .RemoteOperations(true)
-    .Scrolling(scrolling => scrolling.ColumnRenderingMode(GridColumnRenderingMode.Virtual))
+        .Scrolling(scrolling => scrolling.Mode(GridScrollingMode.Virtual))
     .Summary(s => s
         .TotalItems(totalItems =>
         {

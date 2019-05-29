@@ -1,3 +1,8 @@
+@{
+    string PageName = MainMenu.Branch.PageName;
+}
+<div class="long-title"><h3>Danh sách @PageName</h3></div>
+
 @using DevExtremeMvcApp3.Models
 
 @{
@@ -9,25 +14,13 @@
 @(Html.DevExtreme().DataGrid<Order>()
     .ShowBorders(true)
     .DataSource(d => d.WebApi().Controller("Orders").Key("OrderID"))
-    .Columns(columns => {
-        columns.AddFor(m => m.OrderID);
+    .Columns(columns =>
+        {
+            columns.AddFor(m => m.OrderID);
         columns.AddFor(m => m.OrderDate);
         columns.AddFor(m => m.CustomerName);
         columns.AddFor(m => m.ShipCountry);
         columns.AddFor(m => m.ShipCity);
-    })
-    .Paging(p => p.PageSize(10))
-    .FilterRow(f => f.Visible(true))
-    .HeaderFilter(f => f.Visible(true))
-    .GroupPanel(p => p.Visible(true))
-    .Grouping(g => g.AutoExpandAll(false))
-    .RemoteOperations(true)
-    .Summary(s => s
-        .TotalItems(totalItems => {
-            totalItems.AddFor(m => m.ShipCity).SummaryType(SummaryType.Count);
-        })
-        .GroupItems(groupItems => {
-            groupItems.Add().SummaryType(SummaryType.Count);
         })
     )
 )

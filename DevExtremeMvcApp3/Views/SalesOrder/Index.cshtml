@@ -1,66 +1,72 @@
+@{
+    string PageName = MainMenu.SalesOrder.PageName;
+}
+<div class="long-title"><h3>Danh sách @PageName</h3></div>
+
+
 @(Html.DevExtreme().DataGrid<DevExtremeMvcApp3.Models.SalesOrder>()
-        .DataSource(ds => ds.WebApi()
-            .RouteName("SalesOrdersAPIApi")
-            .LoadAction("Get")
-            .InsertAction("Post")
-            .UpdateAction("Put")
-            .DeleteAction("Delete")
-            .Key("SalesOrderId")
-        )
-        .RemoteOperations(true)
-        .Columns(columns =>
-        {
+.DataSource(ds => ds.WebApi()
+.RouteName("SalesOrdersAPIApi")
+.LoadAction("Get")
+.InsertAction("Post")
+.UpdateAction("Put")
+.DeleteAction("Delete")
+.Key("SalesOrderId")
+)
+.RemoteOperations(true)
+.Columns(columns =>
+{
 
-            columns.AddFor(m => m.SalesOrderId);
+ 
 
-            columns.AddFor(m => m.Amount);
+columns.AddFor(m => m.Amount);
 
-            columns.AddFor(m => m.BranchId);
+columns.AddFor(m => m.BranchId);
 
-            columns.AddFor(m => m.CurrencyId);
+columns.AddFor(m => m.CurrencyId);
 
-            columns.AddFor(m => m.CustomerId);
+columns.AddFor(m => m.CustomerId);
 
-            columns.AddFor(m => m.CustomerRefNumber);
+columns.AddFor(m => m.CustomerRefNumber);
 
-            columns.AddFor(m => m.DeliveryDate);
+columns.AddFor(m => m.DeliveryDate);
 
-            columns.AddFor(m => m.Discount);
+columns.AddFor(m => m.Discount);
 
-            columns.AddFor(m => m.Freight);
+columns.AddFor(m => m.Freight);
 
-            columns.AddFor(m => m.OrderDate);
+columns.AddFor(m => m.OrderDate);
 
-            columns.AddFor(m => m.Remarks);
+columns.AddFor(m => m.Remarks);
 
-            columns.AddFor(m => m.SalesOrderName);
+columns.AddFor(m => m.SalesOrderName);
 
-            columns.AddFor(m => m.SalesTypeId);
+columns.AddFor(m => m.SalesTypeId);
 
-            columns.AddFor(m => m.SubTotal);
+columns.AddFor(m => m.SubTotal);
 
-            columns.AddFor(m => m.Tax);
+columns.AddFor(m => m.Tax);
 
-            columns.AddFor(m => m.Total);
-        }).Editing(e => e.Mode(GridEditMode.Popup)
-  .AllowAdding(true)
-  .AllowUpdating(true)
-  .AllowDeleting(true)
-            ).Paging(p => p.PageSize(10))
-        .FilterRow(f => f.Visible(true))
-        .HeaderFilter(f => f.Visible(true))
-        .GroupPanel(p => p.Visible(true))
-        .Grouping(g => g.AutoExpandAll(false))
-        .RemoteOperations(true)
-        .Scrolling(scrolling => scrolling.ColumnRenderingMode(GridColumnRenderingMode.Virtual))
-        .Summary(s => s
-            .TotalItems(totalItems =>
-            {
-                totalItems.AddFor(m => m.SalesOrderId).SummaryType(SummaryType.Count);
-            })
-            .GroupItems(groupItems =>
-            {
-                groupItems.Add().SummaryType(SummaryType.Count);
-            })
-        )
+columns.AddFor(m => m.Total);
+}).Editing(e => e.Mode(GridEditMode.Popup)
+.AllowAdding(true)
+.AllowUpdating(true)
+.AllowDeleting(true)
+).Paging(p => p.PageSize(10))
+.FilterRow(f => f.Visible(true))
+.HeaderFilter(f => f.Visible(true))
+.GroupPanel(p => p.Visible(true))
+.Grouping(g => g.AutoExpandAll(false))
+.RemoteOperations(true)
+.Scrolling(scrolling => scrolling.ColumnRenderingMode(GridColumnRenderingMode.Virtual))
+.Summary(s => s
+.TotalItems(totalItems =>
+{
+totalItems.AddFor(m => m.SalesOrderId).SummaryType(SummaryType.Count);
+})
+.GroupItems(groupItems =>
+{
+groupItems.Add().SummaryType(SummaryType.Count);
+})
+)
 )

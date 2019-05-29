@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * DevExtreme (dx.viz.debug.js)
  * Version: 19.1.3
  * Build date: Tue May 14 2019
@@ -51759,7 +51759,7 @@
                 "dxDataGrid-editingUndeleteRow": "Undelete",
                 "dxDataGrid-editingConfirmDeleteMessage": "Are you sure you want to delete this record?",
                 "dxDataGrid-validationCancelChanges": "Cancel changes",
-                "dxDataGrid-groupPanelEmptyText": "Drag a column header here to group by that column",
+                "dxDataGrid-groupPanelEmptyText": "Kéo một tiêu đề cột vào đây để nhóm theo cột đó",
                 "dxDataGrid-noDataText": "No data",
                 "dxDataGrid-searchPanelPlaceholder": "Search...",
                 "dxDataGrid-filterRowShowAllText": "(All)",
