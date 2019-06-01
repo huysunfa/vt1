@@ -10,33 +10,53 @@ namespace DevExtremeMvcApp3.Controllers.Control
 {
     public class SalesOrderLinesController : Controller
     {
-        // GET: SalesOrderLines
         public ActionResult Index(int ID = 0)
+        {
+            ViewBag.ID = ID;
+
+            return View();
+
+        }
+        public ActionResult Grid(int ID = 0)
         {
             ViewBag.ID = ID;
             using (Models.VTEntities db = new Models.VTEntities())
             {
                 var data = db.SalesOrders.Where(z => z.SalesOrderId == ID).FirstOrDefault();
-                if (data==null)
+                if (data == null)
                 {
                     return RedirectToAction("index", "SalesOrder");
                 }
-                ViewBag.SalesTypeId = db.SalesTypes.Where(z => z.SalesTypeId == data.SalesTypeId).Select(z=>z.SalesTypeName).FirstOrDefault();
-                ViewBag.CustomerId = db.Customers.Where(z => z.CustomerId == data.CustomerId).Select(z=>z.CustomerName).FirstOrDefault();
+                ViewBag.SalesTypeId = db.SalesTypes.Where(z => z.SalesTypeId == data.SalesTypeId).Select(z => z.SalesTypeName).FirstOrDefault();
+                ViewBag.CustomerId = db.Customers.Where(z => z.CustomerId == data.CustomerId).Select(z => z.CustomerName).FirstOrDefault();
                 ViewBag.SalesOrderLines = db.SalesOrderLines.Where(z => z.SalesOrderId == data.SalesOrderId).ToList();
-
-                return View(data);
+                updateSoTien(ID);
+                return PartialView(data);
             }
         }
 
-        public ActionResult Create(int ID=0,int SalesOrderId=0)
+        public void updateSoTien(int ID = 0)
+        {
+            using (Models.VTEntities db = new Models.VTEntities())
+            {
+                var data = db.SalesOrderLines.AsNoTracking().Where(z => z.SalesOrderId == ID).ToList();
+                var item = db.SalesOrders.Where(z => z.SalesOrderId == ID).FirstOrDefault();
+                item.Amount = data.Sum(Z => Z.Amount);
+                item.Discount = data.Where(Z => Z.DiscountAmount.HasValue).Sum(Z => Z.Amount / 100 * Z.DiscountAmount.Value);
+                item.SubTotal = data.Where(Z => Z.SubTotal.HasValue).Sum(Z => Z.SubTotal.Value);
+                item.Tax = data.Where(Z => Z.TaxAmount.HasValue).Sum(Z => Z.Amount / 100 * Z.TaxAmount.Value);
+                item.Total = item.Amount - item.Discount + item.SubTotal + item.Tax;
+                db.SaveChanges();
+            }
+        }
+        public ActionResult Create(int ID = 0, int SalesOrderId = 0)
         {
             ViewBag.ID = ID;
-            using (Models.VTEntities db= new Models.VTEntities())
+            using (Models.VTEntities db = new Models.VTEntities())
             {
                 db.Configuration.ProxyCreationEnabled = false;
                 var data = db.SalesOrderLines.AsNoTracking().Where(z => z.SalesOrderLineId == ID).FirstOrDefault();
-                if (data==null)
+                if (data == null)
                 {
                     data = new Models.SalesOrderLine();
                     data.SalesOrderId = SalesOrderId;
@@ -44,18 +64,32 @@ namespace DevExtremeMvcApp3.Controllers.Control
                 var jsonSettings = new JsonSerializerSettings();
                 jsonSettings.DateFormatString = "yyyy-MM-dd";
                 ViewBag.item = JsonConvert.SerializeObject(data, jsonSettings);
-             }
+            }
             return PartialView();
         }
         [HttpPost]
         public ActionResult Create(SalesOrderLine item)
         {
-            using (Models.VTEntities db= new Models.VTEntities())
+            using (Models.VTEntities db = new Models.VTEntities())
             {
+                item.DateUpdate = DateTime.Now;
                 db.SalesOrderLines.Add(item);
                 db.SaveChanges();
-             }
-            return Json("",JsonRequestBehavior.AllowGet);
+            }
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult Delete(int ID)
+        {
+            using (Models.VTEntities db = new Models.VTEntities())
+            {
+                var item = db.SalesOrderLines.Where(z => z.SalesOrderLineId == ID).FirstOrDefault();
+                ID = item.SalesOrderId;
+                db.SalesOrderLines.Remove(item);
+                db.SaveChanges();
+                updateSoTien(ID);
+            }
+            return Json("", JsonRequestBehavior.AllowGet);
         }
     }
 }

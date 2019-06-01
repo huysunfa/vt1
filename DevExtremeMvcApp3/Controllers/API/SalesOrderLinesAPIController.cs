@@ -22,7 +22,7 @@ namespace DevExtremeMvcApp3.Models.Controllers
         [HttpGet]
         public HttpResponseMessage Get(DataSourceLoadOptions loadOptions,int ID=0) {
 
-            var salesorderlines = _context.SalesOrderLines.Where(z=>z.SalesOrderId==ID).Select(i => new {
+            var salesorderlines = _context.SalesOrderLines.Where(z=>z.SalesOrderId==ID).OrderByDescending(z=>z.DateUpdate).Select(i => new {
                 i.SalesOrderLineId,
                 i.Amount,
                 i.Description,

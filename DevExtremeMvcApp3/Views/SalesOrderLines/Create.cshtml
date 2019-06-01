@@ -48,7 +48,7 @@
                                     item-value="ProductId"
                                     v-model="item.ProductId"
                                     cache-items
-                                    clearable
+                                    clearable autofocus
                                     prepend-icon="person"
                                     placeholder=" "
                                     outline flat
@@ -115,7 +115,8 @@
                     },
                     dataType: "json",
                     success: function (response) {
-                        window.location.reload();
+                        $('#myModal_ThemVatTu').modal('hide');
+                            loadGrid();
                     }
                 });
 
