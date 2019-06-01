@@ -272,6 +272,7 @@
     <Content Include="Views\Vendor\Index.cshtml" />
     <Content Include="Views\VendorType\Index.cshtml" />
     <Content Include="Views\Warehouse\Index.cshtml" />
+    <Content Include="Views\SalesOrderLines\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -387,6 +388,7 @@
     <Compile Include="Controllers\Control\PurchaseOrderController.cs" />
     <Compile Include="Controllers\Control\PurchaseTypeController.cs" />
     <Compile Include="Controllers\Control\SalesOrderController.cs" />
+    <Compile Include="Controllers\Control\SalesOrderLinesController.cs" />
     <Compile Include="Controllers\Control\SalesTypeController.cs" />
     <Compile Include="Controllers\Control\ShipmentController.cs" />
     <Compile Include="Controllers\Control\ShipmentTypeController.cs" />

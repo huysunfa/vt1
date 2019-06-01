@@ -11,8 +11,7 @@ namespace DevExtremeMvcApp3.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class SalesOrder
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -20,8 +19,7 @@ namespace DevExtremeMvcApp3.Models
         {
             this.SalesOrderLines = new HashSet<SalesOrderLine>();
         }
-         [Key]
-
+    
         public int SalesOrderId { get; set; }
         public double Amount { get; set; }
         public int BranchId { get; set; }

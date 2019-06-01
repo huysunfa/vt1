@@ -11,11 +11,9 @@ namespace DevExtremeMvcApp3.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class CustomerType
     {
-         [Key]
         public int CustomerTypeId { get; set; }
         public string CustomerTypeName { get; set; }
         public string Description { get; set; }

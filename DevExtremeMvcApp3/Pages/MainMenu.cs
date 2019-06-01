@@ -78,6 +78,14 @@ namespace DevExtremeMvcApp3.Pages
             public const string ControllerName = "SalesOrder";
             public const string ActionName = "Index";
         }
+           public static class SalesOrderLine
+        {
+            public const string PageName = "Chi tiết đơn đặt hàng";
+            public const string RoleName = "Sales Order Lines";
+            public const string Path = "/SalesOrderLines/Index";
+            public const string ControllerName = "SalesOrderLines";
+            public const string ActionName = "Index";
+        }
 
         public static class Shipment
         {

@@ -11,11 +11,9 @@ namespace DevExtremeMvcApp3.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class CashBank
     {
-         [Key]
         public int CashBankId { get; set; }
         public string CashBankName { get; set; }
         public string Description { get; set; }

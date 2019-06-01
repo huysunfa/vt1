@@ -11,11 +11,9 @@ namespace DevExtremeMvcApp3.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class UserProfile
     {
-         [Key]
         public int UserProfileId { get; set; }
         public string ApplicationUserId { get; set; }
         public string ConfirmPassword { get; set; }

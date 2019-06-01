@@ -15,28 +15,34 @@
         .RemoteOperations(true)
         .Columns(columns =>
         {
+            columns.Add()
+            .Type(GridCommandColumnType.Buttons)
+            .Buttons(b => {
 
-        
+                 b.Add().Name(GridColumnButtonName.Edit);
+                b.Add().Name(GridColumnButtonName.Delete);
+                
 
-            columns.AddFor(m => m.Barcode).Width(150);
+            });
+            columns.AddFor(m => m.Barcode);
 
-            columns.AddFor(m => m.BranchId).Width(150);
+            columns.AddFor(m => m.BranchId);
 
-            columns.AddFor(m => m.CurrencyId).Width(150);
+            columns.AddFor(m => m.CurrencyId);
 
-            columns.AddFor(m => m.DefaultBuyingPrice).Width(150);
+            columns.AddFor(m => m.DefaultBuyingPrice);
 
-            columns.AddFor(m => m.DefaultSellingPrice).Width(150);
+            columns.AddFor(m => m.DefaultSellingPrice);
 
-            columns.AddFor(m => m.Description).Width(150);
+            columns.AddFor(m => m.Description);
 
-            columns.AddFor(m => m.ProductCode).Width(150);
+            columns.AddFor(m => m.ProductCode);
 
-            columns.AddFor(m => m.ProductImageUrl).Width(150);
+            columns.AddFor(m => m.ProductImageUrl);
 
-            columns.AddFor(m => m.ProductName).Width(150);
+            columns.AddFor(m => m.ProductName);
 
-            columns.AddFor(m => m.UnitOfMeasureId).Width(150);
+            columns.AddFor(m => m.UnitOfMeasureId);
         })
         .Editing(e => e.Mode(GridEditMode.Popup)
             .AllowAdding(true)
@@ -49,7 +55,7 @@
     .GroupPanel(p => p.Visible(true))
     .Grouping(g => g.AutoExpandAll(false))
     .RemoteOperations(true)
-        .Scrolling(scrolling => scrolling.Mode(GridScrollingMode.Virtual))
+        .ColumnMinWidth(150).ColumnResizingMode(ColumnResizingMode.Widget).AllowColumnResizing(true).Scrolling(z=>z.ScrollByContent(true))
     .Summary(s => s
         .TotalItems(totalItems =>
         {

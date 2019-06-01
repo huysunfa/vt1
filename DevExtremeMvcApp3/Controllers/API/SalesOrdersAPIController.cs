@@ -47,11 +47,11 @@ namespace DevExtremeMvcApp3.Models.Controllers
             var model = new SalesOrder();
             var values = JsonConvert.DeserializeObject<IDictionary>(form.Get("values"));
             PopulateModel(model, values);
-
+            model.CurrencyId = 1;//VND
             Validate(model);
             if (!ModelState.IsValid)
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, GetFullErrorMessage(ModelState));
-
+           
             var result = _context.SalesOrders.Add(model);
             _context.SaveChanges();
 
@@ -130,7 +130,7 @@ namespace DevExtremeMvcApp3.Models.Controllers
             }
 
             if(values.Contains(DELIVERY_DATE)) {
-                model.DeliveryDate = (System.DateTimeOffset)Convert.ChangeType(values[DELIVERY_DATE], typeof(System.DateTimeOffset));
+                model.DeliveryDate = (System.DateTime)Convert.ChangeType(values[DELIVERY_DATE], typeof(System.DateTime));
             }
 
             if(values.Contains(DISCOUNT)) {
@@ -142,7 +142,7 @@ namespace DevExtremeMvcApp3.Models.Controllers
             }
 
             if(values.Contains(ORDER_DATE)) {
-                model.OrderDate = (System.DateTimeOffset)Convert.ChangeType(values[ORDER_DATE], typeof(System.DateTimeOffset));
+                model.OrderDate = (System.DateTime)Convert.ChangeType(values[ORDER_DATE], typeof(System.DateTime));
             }
 
             if(values.Contains(REMARKS)) {

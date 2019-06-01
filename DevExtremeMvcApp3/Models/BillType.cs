@@ -11,11 +11,9 @@ namespace DevExtremeMvcApp3.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class BillType
     {
-         [Key]
         public int BillTypeId { get; set; }
         public string BillTypeName { get; set; }
         public string Description { get; set; }

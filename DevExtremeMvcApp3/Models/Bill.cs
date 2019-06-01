@@ -11,11 +11,9 @@ namespace DevExtremeMvcApp3.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Bill
     {
-         [Key]
         public int BillId { get; set; }
         public System.DateTimeOffset BillDate { get; set; }
         public System.DateTimeOffset BillDueDate { get; set; }

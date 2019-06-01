@@ -11,8 +11,7 @@ namespace DevExtremeMvcApp3.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class AspNetRole
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,7 +20,7 @@ namespace DevExtremeMvcApp3.Models
             this.AspNetRoleClaims = new HashSet<AspNetRoleClaim>();
             this.AspNetUsers = new HashSet<AspNetUser>();
         }
- 
+    
         public string Id { get; set; }
         public string ConcurrencyStamp { get; set; }
         public string Name { get; set; }

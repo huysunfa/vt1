@@ -11,11 +11,9 @@ namespace DevExtremeMvcApp3.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class UnitOfMeasure
     {
-         [Key]
         public int UnitOfMeasureId { get; set; }
         public string Description { get; set; }
         public string UnitOfMeasureName { get; set; }

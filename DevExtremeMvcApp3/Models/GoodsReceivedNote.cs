@@ -11,11 +11,9 @@ namespace DevExtremeMvcApp3.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class GoodsReceivedNote
     {
-         [Key]
         public int GoodsReceivedNoteId { get; set; }
         public System.DateTimeOffset GRNDate { get; set; }
         public string GoodsReceivedNoteName { get; set; }

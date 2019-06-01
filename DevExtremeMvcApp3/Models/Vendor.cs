@@ -11,11 +11,9 @@ namespace DevExtremeMvcApp3.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Vendor
     {
-         [Key]
         public int VendorId { get; set; }
         public string Address { get; set; }
         public string City { get; set; }

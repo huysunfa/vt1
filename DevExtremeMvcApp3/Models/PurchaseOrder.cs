@@ -11,8 +11,7 @@ namespace DevExtremeMvcApp3.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class PurchaseOrder
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,7 +20,6 @@ namespace DevExtremeMvcApp3.Models
             this.PurchaseOrderLines = new HashSet<PurchaseOrderLine>();
         }
     
-         [Key]
         public int PurchaseOrderId { get; set; }
         public double Amount { get; set; }
         public int BranchId { get; set; }

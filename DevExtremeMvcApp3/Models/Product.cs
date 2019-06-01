@@ -11,11 +11,9 @@ namespace DevExtremeMvcApp3.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Product
     {
-        [Key]
         public int ProductId { get; set; }
         public string Barcode { get; set; }
         public int BranchId { get; set; }

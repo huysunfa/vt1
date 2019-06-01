@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="VTModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="VTModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AspNetRoleClaims">
           <Key>
             <PropertyRef Name="Id" />
@@ -284,15 +284,15 @@
           <Property Name="PurchaseOrderLineId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Amount" Type="float" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" />
-          <Property Name="DiscountAmount" Type="float" Nullable="false" />
-          <Property Name="DiscountPercentage" Type="float" Nullable="false" />
-          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="DiscountAmount" Type="float" />
+          <Property Name="DiscountPercentage" Type="float" />
+          <Property Name="Price" Type="float" />
           <Property Name="ProductId" Type="int" Nullable="false" />
           <Property Name="PurchaseOrderId" Type="int" Nullable="false" />
           <Property Name="Quantity" Type="float" Nullable="false" />
-          <Property Name="SubTotal" Type="float" Nullable="false" />
-          <Property Name="TaxAmount" Type="float" Nullable="false" />
-          <Property Name="TaxPercentage" Type="float" Nullable="false" />
+          <Property Name="SubTotal" Type="float" />
+          <Property Name="TaxAmount" Type="float" />
+          <Property Name="TaxPercentage" Type="float" />
           <Property Name="Total" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="PurchaseType">
@@ -331,15 +331,15 @@
           <Property Name="SalesOrderLineId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Amount" Type="float" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" />
-          <Property Name="DiscountAmount" Type="float" Nullable="false" />
-          <Property Name="DiscountPercentage" Type="float" Nullable="false" />
+          <Property Name="DiscountAmount" Type="float" />
+          <Property Name="DiscountPercentage" Type="float" />
           <Property Name="Price" Type="float" Nullable="false" />
           <Property Name="ProductId" Type="int" Nullable="false" />
           <Property Name="Quantity" Type="float" Nullable="false" />
           <Property Name="SalesOrderId" Type="int" Nullable="false" />
-          <Property Name="SubTotal" Type="float" Nullable="false" />
-          <Property Name="TaxAmount" Type="float" Nullable="false" />
-          <Property Name="TaxPercentage" Type="float" Nullable="false" />
+          <Property Name="SubTotal" Type="float" />
+          <Property Name="TaxAmount" Type="float" />
+          <Property Name="TaxPercentage" Type="float" />
           <Property Name="Total" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="SalesType">
@@ -606,8 +606,7 @@
             <End Role="SalesOrderLine" EntitySet="SalesOrderLine" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="VTModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -884,26 +883,7 @@
           <Property Name="Tax" Type="Double" Nullable="false" />
           <Property Name="Total" Type="Double" Nullable="false" />
           <Property Name="VendorId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="PurchaseOrderLines" Relationship="Self.FK_PurchaseOrderLine_PurchaseOrder_PurchaseOrderId" FromRole="PurchaseOrder" ToRole="PurchaseOrderLine" />
-        </EntityType>
-        <EntityType Name="PurchaseOrderLine">
-          <Key>
-            <PropertyRef Name="PurchaseOrderLineId" />
-          </Key>
-          <Property Name="PurchaseOrderLineId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Amount" Type="Double" Nullable="false" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DiscountAmount" Type="Double" Nullable="false" />
-          <Property Name="DiscountPercentage" Type="Double" Nullable="false" />
-          <Property Name="Price" Type="Double" Nullable="false" />
-          <Property Name="ProductId" Type="Int32" Nullable="false" />
-          <Property Name="PurchaseOrderId" Type="Int32" Nullable="false" />
-          <Property Name="Quantity" Type="Double" Nullable="false" />
-          <Property Name="SubTotal" Type="Double" Nullable="false" />
-          <Property Name="TaxAmount" Type="Double" Nullable="false" />
-          <Property Name="TaxPercentage" Type="Double" Nullable="false" />
-          <Property Name="Total" Type="Double" Nullable="false" />
-          <NavigationProperty Name="PurchaseOrder" Relationship="Self.FK_PurchaseOrderLine_PurchaseOrder_PurchaseOrderId" FromRole="PurchaseOrderLine" ToRole="PurchaseOrder" />
+          <NavigationProperty Name="PurchaseOrderLines" Relationship="VTModel.FK_PurchaseOrderLine_PurchaseOrder_PurchaseOrderId" FromRole="PurchaseOrder" ToRole="PurchaseOrderLine" />
         </EntityType>
         <EntityType Name="PurchaseType">
           <Key>
@@ -942,15 +922,15 @@
           <Property Name="SalesOrderLineId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Amount" Type="Double" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DiscountAmount" Type="Double" Nullable="false" />
-          <Property Name="DiscountPercentage" Type="Double" Nullable="false" />
+          <Property Name="DiscountAmount" Type="Double" />
+          <Property Name="DiscountPercentage" Type="Double" />
           <Property Name="Price" Type="Double" Nullable="false" />
           <Property Name="ProductId" Type="Int32" Nullable="false" />
           <Property Name="Quantity" Type="Double" Nullable="false" />
           <Property Name="SalesOrderId" Type="Int32" Nullable="false" />
-          <Property Name="SubTotal" Type="Double" Nullable="false" />
-          <Property Name="TaxAmount" Type="Double" Nullable="false" />
-          <Property Name="TaxPercentage" Type="Double" Nullable="false" />
+          <Property Name="SubTotal" Type="Double" />
+          <Property Name="TaxAmount" Type="Double" />
+          <Property Name="TaxPercentage" Type="Double" />
           <Property Name="Total" Type="Double" Nullable="false" />
           <NavigationProperty Name="SalesOrder" Relationship="Self.FK_SalesOrderLine_SalesOrder_SalesOrderId" FromRole="SalesOrderLine" ToRole="SalesOrder" />
         </EntityType>
@@ -1092,20 +1072,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_PurchaseOrderLine_PurchaseOrder_PurchaseOrderId">
-          <End Role="PurchaseOrder" Type="Self.PurchaseOrder" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="PurchaseOrderLine" Type="Self.PurchaseOrderLine" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PurchaseOrder">
-              <PropertyRef Name="PurchaseOrderId" />
-            </Principal>
-            <Dependent Role="PurchaseOrderLine">
-              <PropertyRef Name="PurchaseOrderId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_SalesOrderLine_SalesOrder_SalesOrderId">
           <End Role="SalesOrder" Type="Self.SalesOrder" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -1148,7 +1114,6 @@
           <EntitySet Name="Products" EntityType="Self.Product" />
           <EntitySet Name="ProductTypes" EntityType="Self.ProductType" />
           <EntitySet Name="PurchaseOrders" EntityType="Self.PurchaseOrder" />
-          <EntitySet Name="PurchaseOrderLines" EntityType="Self.PurchaseOrderLine" />
           <EntitySet Name="PurchaseTypes" EntityType="Self.PurchaseType" />
           <EntitySet Name="SalesOrders" EntityType="Self.SalesOrder" />
           <EntitySet Name="SalesOrderLines" EntityType="Self.SalesOrderLine" />
@@ -1176,10 +1141,6 @@
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserTokens" EntitySet="AspNetUserTokens" />
           </AssociationSet>
-          <AssociationSet Name="FK_PurchaseOrderLine_PurchaseOrder_PurchaseOrderId" Association="Self.FK_PurchaseOrderLine_PurchaseOrder_PurchaseOrderId">
-            <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
-            <End Role="PurchaseOrderLine" EntitySet="PurchaseOrderLines" />
-          </AssociationSet>
           <AssociationSet Name="FK_SalesOrderLine_SalesOrder_SalesOrderId" Association="Self.FK_SalesOrderLine_SalesOrder_SalesOrderId">
             <End Role="SalesOrder" EntitySet="SalesOrders" />
             <End Role="SalesOrderLine" EntitySet="SalesOrderLines" />
@@ -1188,7 +1149,45 @@
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
           </AssociationSet>
+          <EntitySet Name="PurchaseOrderLines" EntityType="VTModel.PurchaseOrderLine" />
+          <AssociationSet Name="FK_PurchaseOrderLine_PurchaseOrder_PurchaseOrderId" Association="VTModel.FK_PurchaseOrderLine_PurchaseOrder_PurchaseOrderId">
+            <End Role="PurchaseOrder" EntitySet="PurchaseOrders" />
+            <End Role="PurchaseOrderLine" EntitySet="PurchaseOrderLines" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="PurchaseOrderLine">
+          <Key>
+            <PropertyRef Name="PurchaseOrderLineId" />
+          </Key>
+          <Property Name="PurchaseOrderLineId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DiscountAmount" Type="Double" />
+          <Property Name="DiscountPercentage" Type="Double" />
+          <Property Name="Price" Type="Double" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="PurchaseOrderId" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Double" Nullable="false" />
+          <Property Name="SubTotal" Type="Double" />
+          <Property Name="TaxAmount" Type="Double" />
+          <Property Name="TaxPercentage" Type="Double" />
+          <Property Name="Total" Type="Double" Nullable="false" />
+          <NavigationProperty Name="PurchaseOrder" Relationship="VTModel.FK_PurchaseOrderLine_PurchaseOrder_PurchaseOrderId" FromRole="PurchaseOrderLine" ToRole="PurchaseOrder" />
+        </EntityType>
+        <Association Name="FK_PurchaseOrderLine_PurchaseOrder_PurchaseOrderId">
+          <End Type="VTModel.PurchaseOrder" Role="PurchaseOrder" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="VTModel.PurchaseOrderLine" Role="PurchaseOrderLine" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PurchaseOrder">
+              <PropertyRef Name="PurchaseOrderId" />
+            </Principal>
+            <Dependent Role="PurchaseOrderLine">
+              <PropertyRef Name="PurchaseOrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1479,25 +1478,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PurchaseOrderLines">
-            <EntityTypeMapping TypeName="VTModel.PurchaseOrderLine">
-              <MappingFragment StoreEntitySet="PurchaseOrderLine">
-                <ScalarProperty Name="PurchaseOrderLineId" ColumnName="PurchaseOrderLineId" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="DiscountAmount" ColumnName="DiscountAmount" />
-                <ScalarProperty Name="DiscountPercentage" ColumnName="DiscountPercentage" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="PurchaseOrderId" ColumnName="PurchaseOrderId" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="SubTotal" ColumnName="SubTotal" />
-                <ScalarProperty Name="TaxAmount" ColumnName="TaxAmount" />
-                <ScalarProperty Name="TaxPercentage" ColumnName="TaxPercentage" />
-                <ScalarProperty Name="Total" ColumnName="Total" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="PurchaseTypes">
             <EntityTypeMapping TypeName="VTModel.PurchaseType">
               <MappingFragment StoreEntitySet="PurchaseType">
@@ -1646,6 +1626,25 @@
               <ScalarProperty Name="Id" ColumnName="UserId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="PurchaseOrderLines">
+            <EntityTypeMapping TypeName="VTModel.PurchaseOrderLine">
+              <MappingFragment StoreEntitySet="PurchaseOrderLine">
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="TaxPercentage" ColumnName="TaxPercentage" />
+                <ScalarProperty Name="TaxAmount" ColumnName="TaxAmount" />
+                <ScalarProperty Name="SubTotal" ColumnName="SubTotal" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="PurchaseOrderId" ColumnName="PurchaseOrderId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="DiscountPercentage" ColumnName="DiscountPercentage" />
+                <ScalarProperty Name="DiscountAmount" ColumnName="DiscountAmount" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="PurchaseOrderLineId" ColumnName="PurchaseOrderLineId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

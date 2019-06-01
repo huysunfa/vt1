@@ -11,11 +11,9 @@ namespace DevExtremeMvcApp3.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class PaymentVoucher
     {
-         [Key]
         public int PaymentvoucherId { get; set; }
         public int BillId { get; set; }
         public int CashBankId { get; set; }

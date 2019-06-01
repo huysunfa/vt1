@@ -39,7 +39,7 @@ columns.AddFor(m => m.WarehouseId);
 .GroupPanel(p => p.Visible(true))
 .Grouping(g => g.AutoExpandAll(false))
 .RemoteOperations(true)
-.Scrolling(scrolling => scrolling.ColumnRenderingMode(GridColumnRenderingMode.Virtual))
+.ColumnMinWidth(150).ColumnResizingMode(ColumnResizingMode.Widget).AllowColumnResizing(true).Scrolling(z=>z.ScrollByContent(true))
 .Summary(s => s
 .TotalItems(totalItems =>
 {

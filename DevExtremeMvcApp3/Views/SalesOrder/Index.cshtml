@@ -1,72 +1,120 @@
-@{
+﻿@{
     string PageName = MainMenu.SalesOrder.PageName;
 }
-<div class="long-title"><h3>Danh s�ch @PageName</h3></div>
+<div class="long-title"><h3>Danh sách @PageName</h3></div>
+
+@(Html.DevExtreme().DataGrid<DevExtremeMvcApp3.Models.SalesOrder>
+    ()
+    .DataSource(ds => ds.WebApi()
+    .RouteName("SalesOrdersAPIApi")
+    .LoadAction("Get")
+    .InsertAction("Post")
+    .UpdateAction("Put")
+    .DeleteAction("Delete")
+    .Key("SalesOrderId")
+    )
+    .RemoteOperations(true)
+    .Columns(columns =>
+    {
+
+    columns.Add()
+    .Type(GridCommandColumnType.Buttons)
+    .Buttons(b =>
+    {
+    b.Add().Name(GridColumnButtonName.Edit);
+    b.Add().Name(GridColumnButtonName.Delete);
+    });
 
 
-@(Html.DevExtreme().DataGrid<DevExtremeMvcApp3.Models.SalesOrder>()
-.DataSource(ds => ds.WebApi()
-.RouteName("SalesOrdersAPIApi")
-.LoadAction("Get")
-.InsertAction("Post")
-.UpdateAction("Put")
-.DeleteAction("Delete")
-.Key("SalesOrderId")
+    columns.AddFor(m => m.Amount).Caption("Số tiền");
+
+    columns.AddFor(m => m.BranchId).Caption("Chi nhánh")
+    .Lookup(lookup => lookup
+    .DataSource(d => d.WebApi()
+    .RouteName("BranchesAPIApi")
+    .LoadAction("Get")
+    .Key("BranchId"))
+    .DisplayExpr("BranchName")
+    .ValueExpr("BranchId")
+    );
+
+         columns.AddFor(m => m.CustomerId).Caption("Khách hàng")
+    .Lookup(lookup => lookup
+    .DataSource(d => d.WebApi()
+    .RouteName("CustomersAPIApi")
+    .LoadAction("Get")
+    .Key("CustomerId"))
+    .DisplayExpr("CustomerName")
+    .ValueExpr("CustomerId")
+    );
+
+    columns.AddFor(m => m.CustomerRefNumber).Caption("Mã đơn đặt hàng");
+
+    columns.AddFor(m => m.DeliveryDate).Caption("Ngày giao hàng").DataType(GridColumnDataType.Date);
+
+    columns.AddFor(m => m.Discount).Caption("Số tiền Giảm giá");
+
+    columns.AddFor(m => m.Freight).Caption("Vận chuyển");
+
+    columns.AddFor(m => m.OrderDate).Caption("Ngày đặt hàng").DataType(GridColumnDataType.Date);
+
+    columns.AddFor(m => m.Remarks).Caption("Ghi chú");
+
+    columns.AddFor(m => m.SalesOrderName).Caption("Tên đơn hàng");
+
+    columns.AddFor(m => m.SalesTypeId)
+    .Caption("Loại hình bán hàng")
+    .Lookup(lookup => lookup
+    .DataSource(d => d.WebApi()
+    .RouteName("SalesTypesAPIApi")
+    .LoadAction("Get")
+    .Key("SalesTypeId"))
+    .DisplayExpr("SalesTypeName")
+    .ValueExpr("SalesTypeId")
+    );
+
+
+    columns.AddFor(m => m.SubTotal).Caption("Số tiền phát sinh");
+
+    columns.AddFor(m => m.Tax).Caption("Thuế");
+
+    columns.AddFor(m => m.Total).Caption("Tổng giá trị đơn hàng");
+    }).Editing(e => e.Mode(GridEditMode.Popup)
+    .AllowAdding(true)
+    .AllowUpdating(true)
+    .AllowDeleting(true)
+    ).Paging(p => p.PageSize(10))
+    .FilterRow(f => f.Visible(true))
+    .HeaderFilter(f => f.Visible(true))
+    .GroupPanel(p => p.Visible(true))
+    .Grouping(g => g.AutoExpandAll(false))
+    .RemoteOperations(true)
+    .ColumnMinWidth(150).ColumnResizingMode(ColumnResizingMode.Widget).AllowColumnResizing(true).Scrolling(z => z.ScrollByContent(true))
+    .Summary(s => s
+    .TotalItems(totalItems =>
+    {
+    totalItems.AddFor(m => m.SalesOrderId).SummaryType(SummaryType.Count);
+    })
+    .GroupItems(groupItems =>
+    {
+    groupItems.Add().SummaryType(SummaryType.Count);
+    })
+    ).OnContextMenuPreparing("contextMenu_preparing")
 )
-.RemoteOperations(true)
-.Columns(columns =>
-{
 
- 
-
-columns.AddFor(m => m.Amount);
-
-columns.AddFor(m => m.BranchId);
-
-columns.AddFor(m => m.CurrencyId);
-
-columns.AddFor(m => m.CustomerId);
-
-columns.AddFor(m => m.CustomerRefNumber);
-
-columns.AddFor(m => m.DeliveryDate);
-
-columns.AddFor(m => m.Discount);
-
-columns.AddFor(m => m.Freight);
-
-columns.AddFor(m => m.OrderDate);
-
-columns.AddFor(m => m.Remarks);
-
-columns.AddFor(m => m.SalesOrderName);
-
-columns.AddFor(m => m.SalesTypeId);
-
-columns.AddFor(m => m.SubTotal);
-
-columns.AddFor(m => m.Tax);
-
-columns.AddFor(m => m.Total);
-}).Editing(e => e.Mode(GridEditMode.Popup)
-.AllowAdding(true)
-.AllowUpdating(true)
-.AllowDeleting(true)
-).Paging(p => p.PageSize(10))
-.FilterRow(f => f.Visible(true))
-.HeaderFilter(f => f.Visible(true))
-.GroupPanel(p => p.Visible(true))
-.Grouping(g => g.AutoExpandAll(false))
-.RemoteOperations(true)
-.Scrolling(scrolling => scrolling.ColumnRenderingMode(GridColumnRenderingMode.Virtual))
-.Summary(s => s
-.TotalItems(totalItems =>
-{
-totalItems.AddFor(m => m.SalesOrderId).SummaryType(SummaryType.Count);
-})
-.GroupItems(groupItems =>
-{
-groupItems.Add().SummaryType(SummaryType.Count);
-})
-)
-)
+<script>
+    function contextMenu_preparing(e) {
+        if (e.row.rowType == "data") {
+            e.items = [
+                {
+                    text: "Chi tiết đơn đặt hàng",
+                    icon: 'fa fa-info-circle',
+                    useIcons: true,
+                    onItemClick: function () {
+                        window.location.href=("/SalesOrderLines/Index?ID=" + e.row.data.SalesOrderId);
+                    }
+                }
+            ]
+        }
+    }
+</script>

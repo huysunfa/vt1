@@ -11,11 +11,9 @@ namespace DevExtremeMvcApp3.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Shipment
     {
-         [Key]
         public int ShipmentId { get; set; }
         public bool IsFullShipment { get; set; }
         public int SalesOrderId { get; set; }

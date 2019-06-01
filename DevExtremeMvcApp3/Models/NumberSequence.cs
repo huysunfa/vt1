@@ -11,11 +11,9 @@ namespace DevExtremeMvcApp3.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class NumberSequence
     {
-         [Key]
         public int NumberSequenceId { get; set; }
         public int LastNumber { get; set; }
         public string Module { get; set; }

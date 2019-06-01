@@ -20,8 +20,9 @@ namespace DevExtremeMvcApp3.Models.Controllers
         private VTEntities _context = new VTEntities();
 
         [HttpGet]
-        public HttpResponseMessage Get(DataSourceLoadOptions loadOptions) {
-            var salesorderlines = _context.SalesOrderLines.Select(i => new {
+        public HttpResponseMessage Get(DataSourceLoadOptions loadOptions,int ID=0) {
+
+            var salesorderlines = _context.SalesOrderLines.Where(z=>z.SalesOrderId==ID).Select(i => new {
                 i.SalesOrderLineId,
                 i.Amount,
                 i.Description,
@@ -40,9 +41,10 @@ namespace DevExtremeMvcApp3.Models.Controllers
         }
 
         [HttpPost]
-        public HttpResponseMessage Post(FormDataCollection form) {
+        public HttpResponseMessage Post(FormDataCollection form,int ID=0) {
             var model = new SalesOrderLine();
             var values = JsonConvert.DeserializeObject<IDictionary>(form.Get("values"));
+            model.SalesOrderId = ID;
             PopulateModel(model, values);
 
             Validate(model);

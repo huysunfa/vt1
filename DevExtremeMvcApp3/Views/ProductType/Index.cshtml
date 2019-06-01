@@ -1,7 +1,7 @@
-@{
+﻿@{
     string PageName = MainMenu.ProductType.PageName;
 }
-<div class="long-title"><h3>Danh s�ch @PageName</h3></div>
+<div class="long-title"><h3>Danh sách @PageName</h3></div>
 
 @(Html.DevExtreme().DataGrid<DevExtremeMvcApp3.Models.ProductType>()
 .DataSource(ds => ds.WebApi()
@@ -18,9 +18,10 @@
 
  
 
-columns.AddFor(m => m.Description);
+columns.AddFor(m => m.ProductTypeName).Caption("Tên loại vật tư");
+    
+columns.AddFor(m => m.Description).Caption("Mô tả");
 
-columns.AddFor(m => m.ProductTypeName);
 }).Editing(e => e.Mode(GridEditMode.Popup)
 .AllowAdding(true)
 .AllowUpdating(true)
@@ -31,7 +32,7 @@ columns.AddFor(m => m.ProductTypeName);
 .GroupPanel(p => p.Visible(true))
 .Grouping(g => g.AutoExpandAll(false))
 .RemoteOperations(true)
-.Scrolling(scrolling => scrolling.ColumnRenderingMode(GridColumnRenderingMode.Virtual))
+.ColumnMinWidth(150).ColumnResizingMode(ColumnResizingMode.Widget).AllowColumnResizing(true).Scrolling(z=>z.ScrollByContent(true))
 .Summary(s => s
 .TotalItems(totalItems =>
 {
