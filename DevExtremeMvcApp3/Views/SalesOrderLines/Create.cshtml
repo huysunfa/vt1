@@ -1,0 +1,171 @@
+﻿
+
+
+
+@helper Text(string Name, string size = "md3", string rules = "NotEmpty")
+{
+    <v-flex xs12 @size>
+        <v-text-field v-model="item.@Name" :rules="@rules" outline label="@Name" placeholder=" "></v-text-field>
+    </v-flex>
+}
+@helper Number(string Name, string Label, string size = "md3", string rules = "[]")
+{
+    <v-flex xs12 @size>
+        <v-text-field type="number" v-model="item.@Name" :hide-details="true" :rules="@rules" prepend-icon="chat" outline label="@Label" placeholder=" "></v-text-field>
+    </v-flex>
+}
+
+@helper Date(string Name, string size = "md3")
+{
+    <v-flex xs12 @size>
+        <v-dialog ref="dialog"
+                  v-model="temp.modal_@Name"
+                  lazy
+                  full-width
+                  width="290px">
+            <v-text-field slot="activator"
+                          v-model="item.@Name"
+                          label="@Name"
+                          placeholder=" "
+                          outline :hide-details="true"
+                          :rules="NotEmpty"
+                          prepend-icon="event"
+                          readonly></v-text-field>
+            <v-date-picker @@change="temp.modal_@Name=false" v-model="item.@Name">
+            </v-date-picker>
+        </v-dialog>
+    </v-flex>
+}
+<div id="app">
+    <v-app id="inspire">
+        <v-form v-model="valid">
+            <label>Thông tin tài sản</label>
+            <div class="col-12 col-md-11 row">
+
+                <v-flex xs12 md12>
+                    <v-autocomplete style="font-size:14px" :items="Section"
+                                    item-text="ProductName"
+                                    item-value="ProductId"
+                                    v-model="item.ProductId"
+                                    cache-items
+                                    clearable
+                                    prepend-icon="person"
+                                    placeholder=" "
+                                    outline flat
+                                    hide-no-data :rules="NotEmpty"
+                                    label="Vật tư"></v-autocomplete>
+                </v-flex>
+
+                @Number("Quantity", "Số lượng")
+                @Number("Amount", "Gía nhập (Vnđ)")
+                @Number("Price", "Gía bán (Vnđ)")
+                @Number("SubTotal", "Phụ phí (Vnđ)")
+                @Number("TaxAmount", "Thuế (%)")
+                @Number("Total", "Tổng tiền (Vnđ)")
+                @Text("Remark", "md12", "[]")
+            </div>
+            <v-btn @@click="submit" :disabled="!valid" color="info  " style="float:right">
+                <v-icon dark>save</v-icon> &nbsp;
+                Lưu lại
+            </v-btn>
+            <span style="font-size:30PX;float:right;color:orangered">  {{SAVE}} </span>
+
+        </v-form>
+    </v-app>
+</div>
+<script>
+    var item = JSON.parse('@Html.Raw(ViewBag.item)');
+
+    function FromJsonToDate(value) {
+        if (value != null) {
+            return new Date(parseInt(value.replace('/Date(', '')));
+        }
+        return;
+    }
+      $.ajax({
+        type: "GET",
+        url: "/api/ProductsAPI/GET",
+        dataType: "json",
+          success: function (response) {
+              app.Section = response.data;
+         }
+      });
+    var app = new Vue({
+        el: '#app',
+        data: () => ({
+            valid: false,
+            item: item,
+            temp: {},
+            Section: [],
+            SAVE: "",
+            NotEmpty: [
+                v => !!v || 'Không được để trống',
+            ],
+        }),
+        methods: {
+            submit: function (event) {
+                this.valid = false;
+                this.SAVE = "Xin chờ chút, đang lưu dữ liệu....";
+
+                $.ajax({
+                    type: "POST",
+                    url: "/SalesOrderLines/Create",
+                    data: {
+                        item: app.item
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        window.location.reload();
+                    }
+                });
+
+            }
+        },
+        watch: {
+            "item.ProductId": function () {
+                app.item.Price = 0;
+                app.item.Quantity = 1;
+                app.item.Amount = 0;
+
+            }
+            ,
+            item:
+                {
+                handler: function (e) {
+                    if ( app.item.Price  == 0)
+                    {
+                        var ItemProduct = app.Section.filter(function (animal) {
+                                    return (
+                                        animal.ProductId == app.item.ProductId);
+                               });
+                             if (ItemProduct.length==1) {
+                                app.item.Amount = ItemProduct[0].DefaultBuyingPrice;
+                                app.item.Price = ItemProduct[0].DefaultSellingPrice;
+                            }
+                        }
+
+                     var total = Number(app.item.Price) * Number(app.item.Quantity) ;
+                        app.item.Total = total + (total / 100 * Number(app.item.TaxAmount))+ Number(app.item.SubTotal);
+
+                        if (total < app.item.Amount) {
+                            app.SAVE = "Gía bán hiện đang nhỏ hơn giá nhập vào";
+                        } else {
+                            app.SAVE = "";
+
+                        }
+                }
+                , deep: true
+
+            }
+        }
+
+    })
+
+    if (app.item.SalesOrderLineId!=0) {
+          app.item.Price = 0;
+    app.item.TaxAmount = 0;
+    app.item.SubTotal = 0;
+    app.item.Total = 0;
+    }
+
+</script>

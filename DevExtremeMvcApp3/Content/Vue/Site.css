@@ -1,0 +1,50 @@
+﻿
+.theme--light.v-text-field--outline > .v-input__control > .v-input__slot {
+    border: 1px solid #17a2b8;
+    background-color: #fff !important;
+}
+
+.theme--light.application {
+    background-color: #fff !important
+}
+
+p {
+    margin-bottom: 2PX !important;
+}
+
+[v-cloak] {
+    display: none !important;
+}
+
+.v-label, .theme--light.v-label {
+    color: #000000 !important;
+}
+
+.v-text-field {
+    padding-top: 10px !important;
+    margin-top: 0 !important;
+}
+
+.theme--light.v-text-field--outline > .v-input__control > .v-input__slot {
+    border: 1px solid #17a2b8 !important;
+}
+
+.theme--light.v-text-field--outline:not(.v-input--is-focused):not(.v-input--has-state) > .v-input__control > .v-input__slot:hover {
+    border: 1px solid green !important;
+}
+
+.theme--light.v-icon {
+    color: #17a2b8 !important;
+}
+
+.card {
+    position: initial !important
+}
+
+.application--wrap {
+    min-height: 0px !important
+}
+
+.main-sidebar {
+    z-index: 10 !important
+}

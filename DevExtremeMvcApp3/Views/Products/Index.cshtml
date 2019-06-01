@@ -24,25 +24,24 @@
                 
 
             });
-            columns.AddFor(m => m.Barcode);
+            columns.AddFor(m => m.Barcode).Caption("Mã vạch");
 
-            columns.AddFor(m => m.BranchId);
+            columns.AddFor(m => m.BranchId).Caption("Chi nhánh");
 
-            columns.AddFor(m => m.CurrencyId);
+            columns.AddFor(m => m.DefaultBuyingPrice).Caption("Gía nhập");
 
-            columns.AddFor(m => m.DefaultBuyingPrice);
+            columns.AddFor(m => m.DefaultSellingPrice).Caption("Gía mua");
 
-            columns.AddFor(m => m.DefaultSellingPrice);
+            columns.AddFor(m => m.Description).Caption("Mô tả");
 
-            columns.AddFor(m => m.Description);
+            columns.AddFor(m => m.ProductCode).Caption("Mã vật tư");
 
-            columns.AddFor(m => m.ProductCode);
+            columns.AddFor(m => m.ProductImageUrl).Caption("Ảnh vật tư");
 
-            columns.AddFor(m => m.ProductImageUrl);
+            columns.AddFor(m => m.ProductName).Caption("Tên vật tư");
 
-            columns.AddFor(m => m.ProductName);
-
-            columns.AddFor(m => m.UnitOfMeasureId);
+            columns.AddFor(m => m.UnitOfMeasureId).Caption("Đơn vị tính");
+   
         })
         .Editing(e => e.Mode(GridEditMode.Popup)
             .AllowAdding(true)

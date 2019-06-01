@@ -27,6 +27,7 @@ namespace DevExtremeMvcApp3.Models
         public Nullable<double> TaxAmount { get; set; }
         public Nullable<double> TaxPercentage { get; set; }
         public double Total { get; set; }
+        public System.DateTime DateUpdate { get; set; }
     
         public virtual SalesOrder SalesOrder { get; set; }
     }

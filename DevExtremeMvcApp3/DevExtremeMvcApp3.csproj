@@ -156,6 +156,12 @@
     <Content Include="Content\LTE\jquery.min.js" />
     <Content Include="Content\LTE\jquery.slimscroll.js" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\Vue\iconfont\material-icons.css" />
+    <Content Include="Content\Vue\iconfont\MaterialIcons-Regular.svg" />
+    <Content Include="Content\Vue\Site.css" />
+    <Content Include="Content\Vue\vue.js" />
+    <Content Include="Content\Vue\vuetify.js" />
+    <Content Include="Content\Vue\vuetify.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Models\Model1.Context.tt">
@@ -205,6 +211,13 @@
     <Content Include="Models\Model1.edmx.diagram">
       <DependentUpon>Model1.edmx</DependentUpon>
     </Content>
+    <Content Include="Content\Vue\iconfont\codepoints" />
+    <Content Include="Content\Vue\iconfont\MaterialIcons-Regular.eot" />
+    <Content Include="Content\Vue\iconfont\MaterialIcons-Regular.ijmap" />
+    <Content Include="Content\Vue\iconfont\MaterialIcons-Regular.ttf" />
+    <Content Include="Content\Vue\iconfont\MaterialIcons-Regular.woff" />
+    <Content Include="Content\Vue\iconfont\MaterialIcons-Regular.woff2" />
+    <Content Include="Content\Vue\iconfont\README.md" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -273,6 +286,7 @@
     <Content Include="Views\VendorType\Index.cshtml" />
     <Content Include="Views\Warehouse\Index.cshtml" />
     <Content Include="Views\SalesOrderLines\Index.cshtml" />
+    <Content Include="Views\SalesOrderLines\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -399,6 +413,7 @@
     <Compile Include="Controllers\Control\WarehouseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
+    <Compile Include="Extentions\TienTe.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

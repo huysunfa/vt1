@@ -1,87 +1,345 @@
-﻿@{
-    string PageName = MainMenu.SalesOrderLine.PageName;
+﻿@model DevExtremeMvcApp3.Models.SalesOrder
+@{
+    var SalesOrderLines = (List<DevExtremeMvcApp3.Models.SalesOrderLine>)ViewBag.SalesOrderLines;
+
+    DevExtremeMvcApp3.Models.VTEntities db = new VTEntities();
 }
-<div class="long-title"><h3>Danh sách @PageName</h3></div>
- 
-@(Html.DevExtreme().DataGrid<DevExtremeMvcApp3.Models.SalesOrderLine>
-    ()
-    .DataSource(ds => ds.WebApi()
-    .RouteName("SalesOrderLinesAPIApi")
-    .LoadAction("Get").LoadParams(new { ID =  ViewBag.ID })
-    .InsertAction("Post").LoadParams(new { ID =  ViewBag.ID })
-    .UpdateAction("Put").LoadParams(new { ID =  ViewBag.ID })
-    .DeleteAction("Delete")
-    .Key("SalesOrderLineId")
-    )
-    .RemoteOperations(true)
-    .Columns(columns =>
-    {
+<style>
+    .list-group-item {
+        padding: 5PX
+    }
 
-    columns.Add()
-    .Type(GridCommandColumnType.Buttons)
-    .Buttons(b =>
-    {
-    b.Add().Name(GridColumnButtonName.Edit);
-    b.Add().Name(GridColumnButtonName.Delete);
-    });
+    p {
+        margin-bottom: 1px
+    }
 
- 
-        
-    columns.AddFor(m => m.ProductId).Caption("Vật tư").Lookup(lookup => lookup
-    .DataSource(d => d.WebApi()
-    .RouteName("ProductsAPIApi")
-    .LoadAction("Get")
-    .Key("ProductId"))
-    .DisplayExpr("ProductName")
-    .ValueExpr("ProductId")
-    );
-       columns.AddFor(m => m.Amount).Caption("Số tiền");
+    #DS_DH th {
+        min-width: 100PX !important
+    }
 
-    columns.AddFor(m => m.Description).Caption("Mô tả");
+    .table th, .table td {
+        padding: 3px;
+        font-size: 14px;
+        white-space:normal
+    }
+</style>
+<div class="row">
+    <div class="col-md-3">
 
-    columns.AddFor(m => m.DiscountAmount).Caption("Giảm giá");
-
-    columns.AddFor(m => m.DiscountPercentage).Caption("Tỷ lệ chiết khấu");
-
-    columns.AddFor(m => m.Price).Caption("Giá bán");
+        <!-- Profile Image -->
+        <div class="card card-primary card-outline">
+            <div class="card-body box-profile">
 
 
-    columns.AddFor(m => m.Quantity).Caption("Số lượng");
+                <h3 class="profile-username text-center">@Model.SalesOrderName</h3>
+
+                <p class="text-muted text-center">
+                    @ViewBag.SalesTypeId
+                </p>
+
+                <ul class="list-group list-group-unbordered mb-3">
+                    <li class="list-group-item">
+                        <b>Khách hàng</b> <a class="float-right">@ViewBag.CustomerId</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Chi nhánh</b> <a class="float-right">@db.Branches.Where(z => z.BranchId == Model.BranchId).Select(z => z.BranchName).FirstOrDefault()</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Mã đơn hàng</b> <a class="float-right">@Model.CustomerRefNumber</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Ngày giao hàng</b> <a class="float-right">@Model.DeliveryDate.ToString("dd/MM/yyyy")</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Ngày đặt hàng</b> <a class="float-right">@Model.OrderDate.ToString("dd/MM/yyyy")</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Số tiền</b> <a class="float-right">@Model.Amount</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Số tiền giảm giá</b> <a class="float-right">@Model.Discount</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Phí vận chuyển</b> <a class="float-right">@Model.Freight</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Phí phát sinh</b> <a class="float-right">@Model.SubTotal</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Thuế</b> <a class="float-right">@Model.Tax</a>
+                    </li>
+
+                    <li class="list-group-item">
+                        <b>Ghi chú</b> <a class="float-right">@Model.Remarks</a>
+                    </li>
+                    <li class="list-group-item bg-danger text-white">
+                        <b>Tổng giá trị</b><br /> <b class="float-right " style="font-size:20px">@Model.Total.ToString("#,###") VND</b><br />
+                        <p style="margin-bottom:0">  <small>@DevExtremeMvcApp3.Extentions.TienTe.DocTien(Model.Total)</small></p>
+                    </li>
+                </ul>
+
+                <a href="#" class="btn btn-primary btn-block"><b>Nhận thanh toán</b></a>
+            </div>
+            <!-- /.card-body -->
+        </div>
+
+    </div>
+    <!-- /.col -->
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header p-2">
+                <ul class="nav nav-pills">
+                    <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Đơn hàng</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Thống kê</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
+                </ul>
+            </div><!-- /.card-header -->
+            <div class="card-body">
+                <div class="tab-content">
+                    <div class="active tab-pane table-responsive" id="activity">
+                        <table class="table" id="DS_DH">
+                            <tr>
+                                <th><a  onclick="Create('@Model.SalesOrderId')" class="btn btn-sm text-primary btn-outline-primary">Thêm vật tư</a></th>
+                                <th colspan="10">Danh sách vật tư trong đơn hàng</th>
+                            </tr>
+                            <tr>
+                                <th>Thao tác</th>
+                                <th>Vật tư</th>
+                                <th>Số lượng</th>
+                                <th>Giá nhập</th>
+                                <th>Tổng tiền</th>
+                                <th>
+                                    Giảm giá
+                                </th>
+                                <th>
+                                    Chiết khấu
+                                </th>
+                                <th>
+                                    Giá bán
+                                </th>
+                                <th>Phụ phí</th>
+                                <th>Thuế</th>
+                                <th>Ghi chú</th>
+                            </tr>
+                            <tbody>
+                                @foreach (var item in SalesOrderLines)
+                                {
+                                    var sp = db.Products.Where(z => z.ProductId == item.ProductId).Select(z => z.ProductName).FirstOrDefault();
+                                    <tr>
+                                        <td>
+                                            <a onclick="Create('@item.SalesOrderId','@item.SalesOrderLineId')" class="btn-sm    btn-outline-info  text-info "><i class="fa fa-edit"></i></a>
+                                            <a class="btn-sm   btn-outline-danger   text-danger "><i class="fa fa-trash"></i></a>
+                                        </td>
+                                        <td>@sp</td>
+                                        <td>@item.Quantity</td>
+                                        <td>@item.Amount</td>
+                                        <td>@item.Total</td>
+
+                                        <td>@item.DiscountAmount</td>
+                                        <td>@item.DiscountPercentage</td>
+                                        <td>@item.Price</td>
+                                        <td>@item.SubTotal</td>
+                                        <td>@item.TaxAmount</td>
+                                        <td>@item.Description</td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.tab-pane -->
+                    <div class="tab-pane" id="timeline">
+                        <!-- The timeline -->
+                        <ul class="timeline timeline-inverse">
+                            <!-- timeline time label -->
+                            <li class="time-label">
+                                <span class="bg-danger">
+                                    10 Feb. 2014
+                                </span>
+                            </li>
+                            <!-- /.timeline-label -->
+                            <!-- timeline item -->
+                            <li>
+                                <i class="fas fa-envelope bg-primary"></i>
+
+                                <div class="timeline-item">
+                                    <span class="time"><i class="far fa-clock"></i> 12:05</span>
+
+                                    <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
+
+                                    <div class="timeline-body">
+                                        Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
+                                        weebly ning heekya handango imeem plugg dopplr jibjab, movity
+                                        jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
+                                        quora plaxo ideeli hulu weebly balihoo...
+                                    </div>
+                                    <div class="timeline-footer">
+                                        <a href="#" class="btn btn-primary btn-sm">Read more</a>
+                                        <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- END timeline item -->
+                            <!-- timeline item -->
+                            <li>
+                                <i class="fas fa-user bg-info"></i>
+
+                                <div class="timeline-item">
+                                    <span class="time"><i class="far fa-clock"></i> 5 mins ago</span>
+
+                                    <h3 class="timeline-header no-border">
+                                        <a href="#">Sarah Young</a> accepted your friend request
+                                    </h3>
+                                </div>
+                            </li>
+                            <!-- END timeline item -->
+                            <!-- timeline item -->
+                            <li>
+                                <i class="fas fa-comments bg-warning"></i>
+
+                                <div class="timeline-item">
+                                    <span class="time"><i class="far fa-clock"></i> 27 mins ago</span>
+
+                                    <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
+
+                                    <div class="timeline-body">
+                                        Take me to your leader!
+                                        Switzerland is small and neutral!
+                                        We are more like Germany, ambitious and misunderstood!
+                                    </div>
+                                    <div class="timeline-footer">
+                                        <a href="#" class="btn btn-warning btn-flat btn-sm">View comment</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- END timeline item -->
+                            <!-- timeline time label -->
+                            <li class="time-label">
+                                <span class="bg-success">
+                                    3 Jan. 2014
+                                </span>
+                            </li>
+                            <!-- /.timeline-label -->
+                            <!-- timeline item -->
+                            <li>
+                                <i class="fas fa-camera bg-purple"></i>
+
+                                <div class="timeline-item">
+                                    <span class="time"><i class="far fa-clock"></i> 2 days ago</span>
+
+                                    <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
+
+                                    <div class="timeline-body">
+                                        <img src="http://placehold.it/150x100" alt="..." class="margin">
+                                        <img src="http://placehold.it/150x100" alt="..." class="margin">
+                                        <img src="http://placehold.it/150x100" alt="..." class="margin">
+                                        <img src="http://placehold.it/150x100" alt="..." class="margin">
+                                    </div>
+                                </div>
+                            </li>
+                            <!-- END timeline item -->
+                            <li>
+                                <i class="far fa-clock bg-gray"></i>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- /.tab-pane -->
+
+                    <div class="tab-pane" id="settings">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="inputName" class="col-sm-2 control-label">Name</label>
+
+                                <div class="col-sm-10">
+                                    <input type="email" class="form-control" id="inputName" placeholder="Name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail" class="col-sm-2 control-label">Email</label>
+
+                                <div class="col-sm-10">
+                                    <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputName2" class="col-sm-2 control-label">Name</label>
+
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputName2" placeholder="Name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputExperience" class="col-sm-2 control-label">Experience</label>
+
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputSkills" class="col-sm-2 control-label">Skills</label>
+
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputSkills" placeholder="Skills">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-danger">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.tab-pane -->
+                </div>
+                <!-- /.tab-content -->
+            </div><!-- /.card-body -->
+        </div>
+        <!-- /.nav-tabs-custom -->
+    </div>
+    <!-- /.col -->
+</div>
 
 
-    columns.AddFor(m => m.SubTotal).Caption("Phụ phí");
 
-    columns.AddFor(m => m.TaxAmount).Caption("Thuế");
+<!-- The Modal -->
+<div class="modal" id="myModal_ThemVatTu">
+    <div class="modal-dialog" style="max-width:90%">
+        <div class="modal-content">
 
-    columns.AddFor(m => m.TaxPercentage).Caption("Tỷ lệ thuế");
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Modal Heading</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
 
-    columns.AddFor(m => m.Total).Caption("Tổng tiền");
-    })
-    .Editing(e => e.Mode(GridEditMode.Popup)
-    .AllowAdding(true)
-    .AllowUpdating(true)
-    .AllowDeleting(true)
-    ).Paging(p => p.PageSize(10))
-    .FilterRow(f => f.Visible(true))
-    .HeaderFilter(f => f.Visible(true))
-    .GroupPanel(p => p.Visible(true))
-    .Grouping(g => g.AutoExpandAll(false))
-    .RemoteOperations(true)
-    .ColumnMinWidth(150).ColumnResizingMode(ColumnResizingMode.Widget).AllowColumnResizing(true).Scrolling(z => z.ScrollByContent(true))
-    .Summary(s => s
-    .TotalItems(totalItems =>
-    {
-    totalItems.AddFor(m => m.SalesOrderId).SummaryType(SummaryType.Count);
-    })
-    .GroupItems(groupItems =>
-    {
-    groupItems.Add().SummaryType(SummaryType.Count);
-    })
-    ).OnInitNewRow("onInitNewRow")
-    )
+            <!-- Modal body -->
+            <div class="modal-body" id="myModal_ThemVatTu_body">
+                
+            </div>
 
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
 <script>
-    function onInitNewRow (e) {
-        e.data.SalesOrderId = '@ViewBag.ID'; 
- }
+
+    function Create(SalesOrderId, ID) {
+
+        $('#myModal_ThemVatTu_body').html("Đang tải dữ liệu...");
+        $('#myModal_ThemVatTu_body').load("/SalesOrderLines/Create?SalesOrderId=" + SalesOrderId + "&ID=" + ID);
+        $('#myModal_ThemVatTu').modal("show");
+    }
 </script>

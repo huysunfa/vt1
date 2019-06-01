@@ -1,4 +1,4 @@
-﻿ 
+﻿
 
 .dx-datagrid-headers {
     color: #fff!important;
@@ -21,6 +21,6 @@ body {
 .nav-link{
     padding:13px!important;font-weight:normal
 }
-.active {
-    background-color: #009688!important;
+#nav-item .active {
+    background-color: #009688 !important;
 }

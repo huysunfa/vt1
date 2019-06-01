@@ -48,6 +48,7 @@ namespace DevExtremeMvcApp3.Models
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductType> ProductTypes { get; set; }
         public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+        public virtual DbSet<PurchaseOrderLine> PurchaseOrderLines { get; set; }
         public virtual DbSet<PurchaseType> PurchaseTypes { get; set; }
         public virtual DbSet<SalesOrder> SalesOrders { get; set; }
         public virtual DbSet<SalesOrderLine> SalesOrderLines { get; set; }
@@ -59,6 +60,5 @@ namespace DevExtremeMvcApp3.Models
         public virtual DbSet<Vendor> Vendors { get; set; }
         public virtual DbSet<VendorType> VendorTypes { get; set; }
         public virtual DbSet<Warehouse> Warehouses { get; set; }
-        public virtual DbSet<PurchaseOrderLine> PurchaseOrderLines { get; set; }
     }
 }

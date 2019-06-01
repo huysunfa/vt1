@@ -28,7 +28,11 @@
     }
     <link href="~/Content/LTE/adminlte.css" rel="stylesheet" />
     <script src="~/Content/LTE/adminlte.js"></script>
-
+    <link href="~/Content/Vue/iconfont/material-icons.css" rel="stylesheet" />
+    <script src="~/Content/Vue/vue.js"></script>
+    <link href="~/Content/Vue/vuetify.min.css" rel="stylesheet" />
+    <script src="~/Content/Vue/vuetify.js"></script>
+    <link href="~/Content/Vue/Site.css" rel="stylesheet" />
 </head>
 <body class="hold-transition sidebar-mini">
     <!-- Site wrapper -->
@@ -234,11 +238,11 @@
             <section class="content">
                 <!-- Default box -->
                 <div class="card">
-
+                    <a class="btn btn-primary text-white fixed-bottom" style=" z-index:9999;width:50PX" data-widget="pushmenu" href="#"><i class="fa fa-bars"></i></a>
                     <div class="card-body">
                         @RenderBody()
                     </div>
-                   
+
                 </div>
                 <!-- /.card -->
             </section>
