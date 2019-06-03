@@ -57,19 +57,23 @@
                 </v-flex>
 
                 @Number("Quantity", "Số lượng")
-                @Number("Amount", "Gía nhập (Vnđ)")
-                @Number("Price", "Gía bán (Vnđ)")
                 @Number("SubTotal", "Phụ phí (Vnđ)")
-                @Number("DiscountAmount", "Chiết khấu")
+                @Number("DiscountAmount", "Chiết khấu (%)")
                 @Number("TaxAmount", "Thuế (%)")
-                @Number("Total", "Tổng tiền (Vnđ)")
                 @Text("Remark", "md12", "[]")
+
+                <div class="col-5">
+                    <p> <h2 class="col-12">Gía nhập&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <b class="right">{{item.Amount.toLocaleString('en-IN')}} VND</b></h2></p>
+                    <p> <h2 class="col-12 bg-success text-white">Gía bán &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <b class="right">{{item.Price.toLocaleString('en-IN')}} VND</b> </h2></p>
+                     <p><h2 class="col-12 bg-danger text-white"> Tổng tiền &nbsp;&nbsp;: <b class="right">  {{item.Total.toLocaleString('en-IN')}} VND</b> </h2></p>
+                </div>
+               
             </div>
             <v-btn @@click="submit" :disabled="!valid" color="info  " style="float:right">
                 <v-icon dark>save</v-icon> &nbsp;
                 Lưu lại
             </v-btn>
-            <span style="font-size:30PX;float:right;color:orangered">  {{SAVE}} </span>
+            <span style="font-size:30PX;float:left;color:orangered">  {{SAVE}} </span>
 
         </v-form>
     </v-app>
@@ -146,8 +150,9 @@
                             }
                         }
 
-                     var total = Number(app.item.Price) * Number(app.item.Quantity) ;
-                        app.item.Total = total + (total / 100 * Number(app.item.TaxAmount))+ Number(app.item.SubTotal);
+                        var total = Number(app.item.Price) * Number(app.item.Quantity);
+                        var ChietKhau = Number(app.item.Price) / 100 * Number(app.item.DiscountAmount);
+                        app.item.Total = total + (total / 100 * Number(app.item.TaxAmount)) + Number(app.item.SubTotal) - ChietKhau;
 
                         if (total < app.item.Amount) {
                             app.SAVE = "Gía bán hiện đang nhỏ hơn giá nhập vào";

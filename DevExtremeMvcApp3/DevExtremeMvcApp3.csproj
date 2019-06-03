@@ -290,6 +290,7 @@
     <Content Include="Views\SalesOrderLines\Grid.cshtml" />
     <Content Include="Views\SalesOrderLines\Chart.cshtml" />
     <Content Include="Views\SalesOrderLines\NhanThanhToan.cshtml" />
+    <Content Include="Views\SalesOrderLines\XuatBaoGia.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

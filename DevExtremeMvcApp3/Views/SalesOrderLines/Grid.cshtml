@@ -54,19 +54,19 @@
                         <b>Ngày đặt hàng</b> <a class="float-right">@Model.OrderDate.ToString("dd/MM/yyyy")</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Tổng Số tiền</b> <a class="float-right">@Model.Amount</a>
+                        <b>Tổng Số tiền</b> <a class="float-right">@Model.Amount.ToString("#,###") VND</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Tổng Chiết khấu</b> <a class="float-right">@Model.Discount</a>
+                        <b>Tổng Chiết khấu</b> <a class="float-right">@Model.Discount.ToString("#,###") VND</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Tổng Phí vận chuyển</b> <a class="float-right">@Model.Freight</a>
+                        <b>Tổng Phí vận chuyển</b> <a class="float-right">@Model.Freight.ToString("#,###") VND</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Tổng Phí phát sinh</b> <a class="float-right">@Model.SubTotal</a>
+                        <b>Tổng Phí phát sinh</b> <a class="float-right">@Model.SubTotal.ToString("#,###") VND</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Tổng Thuế</b> <a class="float-right">@Model.Tax</a>
+                        <b>Tổng Thuế</b> <a class="float-right">@Model.Tax.ToString("#,###") VND</a>
                     </li>
 
                     <li class="list-group-item">
@@ -79,13 +79,13 @@
 
                     <li class="list-group-item  bg-success text-white">
                         <b>Đã thanh toán</b> <a style="font-size:20px" class="float-right">@ViewBag.DaThanhToan VND</a>
-                        
-                    </li>  
+
+                    </li>
                     <li class="list-group-item  bg-warning text-white">
-                         <b>Còn lại</b> <a style="font-size:20px" class="float-right">@ViewBag.ConLai VND</a>
-                     </li>  
+                        <b>Còn lại</b> <a style="font-size:20px" class="float-right">@ViewBag.ConLai VND</a>
+                    </li>
                     <li class="list-group-item">
-                         <b>Công nợ</b> <a style="font-size:20px" class="float-right">@ViewBag.CongNo VND</a>
+                        <b>Công nợ</b> <a style="font-size:20px" class="float-right">@ViewBag.CongNo VND</a>
                     </li>
 
                 </ul>
@@ -103,6 +103,7 @@
                 <ul class="nav nav-pills">
                     <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Đơn hàng</a></li>
                     <li class="nav-item"><a class="nav-link" href="#timeline" id="LoadChart" data-toggle="tab">Thống kê</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#FromXuatBaoGia" id="XuatBaoGia" data-toggle="tab">Xuất báo giá</a></li>
                  </ul>
             </div><!-- /.card-header -->
             <div class="card-body">
@@ -117,54 +118,51 @@
                                 <th>Thao tác</th>
                                 <th>Vật tư</th>
                                 <th>Số lượng</th>
-                                <th>Giá nhập</th>
-                                <th>Tổng tiền</th>
+                                <th>Giá nhập (VND)</th>
+                                <th>Giá bán (VND)</th>
+                                <th>Tổng tiền (VND)</th>
+
                                 <th>
-                                    Giảm giá
+                                    Chiết khấu (%)
                                 </th>
-                                <th>
-                                    Chiết khấu
-                                </th>
-                                <th>
-                                    Giá bán
-                                </th>
-                                <th>Phụ phí</th>
-                                <th>Thuế</th>
+
+                                <th>Phụ phí (VND)</th>
+                                <th>Thuế (%)</th>
                                 <th>Ghi chú</th>
                             </tr>
                             <tbody>
                                 @foreach (var item in SalesOrderLines)
                                 {
                                     var sp = db.Products.Where(z => z.ProductId == item.ProductId).Select(z => z.ProductName).FirstOrDefault();
-                                    <tr>
-                                        <td>
-                                            <a onclick="Create('@item.SalesOrderId','@item.SalesOrderLineId')" class="btn-sm    btn-outline-info  text-info "><i class="fa fa-edit"></i></a>
-                                            <a data-ID="@item.SalesOrderLineId" class="btn-sm Delete  btn-outline-danger   text-danger "><i class="fa fa-trash"></i></a>
-                                        </td>
-                                        <td>@sp</td>
-                                        <td>@item.Quantity</td>
-                                        <td>@item.Amount</td>
-                                        <td>@item.Total</td>
+                                <tr>
+                                    <td>
+                                        <a onclick="Create('@item.SalesOrderId','@item.SalesOrderLineId')" class="btn-sm    btn-outline-info  text-info "><i class="fa fa-edit"></i></a>
+                                        <a data-ID="@item.SalesOrderLineId" class="btn-sm Delete  btn-outline-danger   text-danger "><i class="fa fa-trash"></i></a>
+                                    </td>
+                                    <td>@sp</td>
+                                    <td>@item.Quantity</td>
+                                    <td>@item.Amount.ToString("#,###")</td>
+                                    <td>@item.Price.ToString("#,###")</td>
+                                    <td>@item.Total.ToString("#,###")</td>
 
-                                        <td>@item.DiscountAmount</td>
-                                        <td>@item.DiscountPercentage</td>
-                                        <td>@item.Price</td>
-                                        <td>@item.SubTotal</td>
-                                        <td>@item.TaxAmount</td>
-                                        <td>@item.Description</td>
+                                    <td>@(item.DiscountAmount.HasValue ? item.DiscountAmount.Value.ToString("#,###") : "0")</td>
+                                     <td>@(item.SubTotal.HasValue ? item.SubTotal.Value.ToString("#,###") : "0")</td>
+                                    <td>@(item.TaxAmount.HasValue ? item.TaxAmount.Value.ToString("#,###") : "0")</td>
+                                    <td>@item.Description</td>
 
-                                    </tr>
+                                </tr>
                                 }
                             </tbody>
                         </table>
                     </div>
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="timeline">
-                   
+
+                    </div> 
+                    <div class="tab-pane" id="FromXuatBaoGia">
+
                     </div>
                     <!-- /.tab-pane -->
-
-          
                     <!-- /.tab-pane -->
                 </div>
                 <!-- /.tab-content -->
@@ -195,6 +193,12 @@
         e.preventDefault();
             $('#timeline').html("Đang tải dữ liệu...");
         $('#timeline').load("/SalesOrderLines/Chart?ID=@Model.SalesOrderId");
+
+    });
+    $("#XuatBaoGia").click(function (e) {
+        e.preventDefault();
+        $('#FromXuatBaoGia').html("Đang tải dữ liệu...");
+        $('#FromXuatBaoGia').load("/SalesOrderLines/XuatBaoGia?ID=@Model.SalesOrderId");
 
     });
     function Create(SalesOrderId, ID) {

@@ -24,6 +24,12 @@ namespace DevExtremeMvcApp3.Controllers.Control
             return PartialView();
 
         }
+        public ActionResult XuatBaoGia(int ID = 0)
+        {
+            ViewBag.ID = ID;
+            return PartialView();
+
+        }
         public ActionResult NhanThanhToan(int ID = 0)
         {
             ViewBag.ID = ID;
