@@ -17,6 +17,38 @@ namespace DevExtremeMvcApp3.Controllers.Control
             return View();
 
         }
+
+        public ActionResult Chart(int ID = 0)
+        {
+            ViewBag.ID = ID;
+            return PartialView();
+
+        }
+        public ActionResult NhanThanhToan(int ID = 0)
+        {
+            ViewBag.ID = ID;
+            return PartialView();
+
+        }
+        [HttpPost]
+        public ActionResult ChartData(int ID = 0)
+        {
+            using (Models.VTEntities db = new VTEntities())
+            {
+                string SQL = @"select t2.ProductName,ISNULL(SUM(Total),0) as Total from SalesOrderLine
+                                AS T1 INNER JOIN Product AS T2 ON T1.ProductId = T2.ProductId
+                                 where SalesOrderId = " + ID + "group by t1.ProductId, t2.ProductName";
+                var data = db.Database.SqlQuery<PIE_CHART>(SQL).ToArray();
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+        public class PIE_CHART
+        {
+            public String ProductName { get; set; }
+            public Double Total { get; set; }
+        }
+
         public ActionResult Grid(int ID = 0)
         {
             ViewBag.ID = ID;
@@ -31,6 +63,19 @@ namespace DevExtremeMvcApp3.Controllers.Control
                 ViewBag.SalesTypeId = db.SalesTypes.Where(z => z.SalesTypeId == data.SalesTypeId).Select(z => z.SalesTypeName).FirstOrDefault();
                 ViewBag.CustomerId = db.Customers.Where(z => z.CustomerId == data.CustomerId).Select(z => z.CustomerName).FirstOrDefault();
                 ViewBag.SalesOrderLines = db.SalesOrderLines.Where(z => z.SalesOrderId == data.SalesOrderId).ToList();
+                var LDaThanhToan = db.PaymentReceives.Where(z => z.SalesOrderId == ID).ToList();
+                Double DaThanhToan = 0;
+                if (LDaThanhToan.Count != 0)
+                {
+                    DaThanhToan = LDaThanhToan.Sum(z => z.PaymentAmount);
+
+                }
+                ViewBag.ConLai = (data.Total - DaThanhToan).ToString("#,###");
+                ViewBag.DaThanhToan = DaThanhToan.ToString("#,###");
+                ViewBag.CongNo = db.Database.SqlQuery<Double>("select isnull(Total-PaymentAmount,0) AS CongNo from SalesOrder as t1 left join (select SalesOrderId,SUM(PaymentAmount) AS PaymentAmount from PaymentReceive  WHERE PaymentAmount>0  group by SalesOrderId ) as t2 on t1.SalesOrderId = t2.SalesOrderId where CustomerId = " + data.CustomerId + " and T1.SalesOrderId != " + data.SalesOrderId + " ").FirstOrDefault().ToString("#,###");
+                ViewBag.ConLai = (ViewBag.ConLai == "" ? "0" : ViewBag.ConLai);
+                ViewBag.DaThanhToan = (ViewBag.DaThanhToan == "" ? "0" : ViewBag.DaThanhToan);
+                ViewBag.CongNo = (ViewBag.CongNo == "" ? "0" : ViewBag.CongNo);
                 return PartialView(data);
             }
         }
@@ -41,10 +86,10 @@ namespace DevExtremeMvcApp3.Controllers.Control
             {
                 var data = db.SalesOrderLines.AsNoTracking().Where(z => z.SalesOrderId == ID).ToList();
                 var item = db.SalesOrders.Where(z => z.SalesOrderId == ID).FirstOrDefault();
-                item.Amount = data.Sum(Z => Z.Price*Z.Quantity);
-                item.Discount = data.Where(Z => Z.DiscountAmount.HasValue).Sum(Z => (Z.Amount / 100 * Z.DiscountAmount.Value) * Z.Quantity);
-                item.SubTotal = data.Where(Z => Z.SubTotal.HasValue).Sum(Z => Z.SubTotal.Value );
-                item.Tax = data.Where(Z => Z.TaxAmount.HasValue).Sum(Z =>(Z.Amount *Z.Quantity) / 100 * Z.TaxAmount.Value);
+                item.Amount = data.Sum(Z => Z.Price);
+                item.Discount = data.Where(Z => Z.DiscountAmount.HasValue).Sum(Z => Z.Amount / 100 * Z.DiscountAmount.Value);
+                item.SubTotal = data.Where(Z => Z.SubTotal.HasValue).Sum(Z => Z.SubTotal.Value);
+                item.Tax = data.Where(Z => Z.TaxAmount.HasValue).Sum(Z => Z.Amount / 100 * Z.TaxAmount.Value);
                 item.Total = item.Amount - item.Discount + item.SubTotal + item.Tax;
                 db.SaveChanges();
             }
@@ -72,8 +117,34 @@ namespace DevExtremeMvcApp3.Controllers.Control
         {
             using (Models.VTEntities db = new Models.VTEntities())
             {
-                item.DateUpdate = DateTime.Now;
-                db.SalesOrderLines.Add(item);
+                if (item.SalesOrderLineId == 0)
+                {
+
+                    item.DateUpdate = DateTime.Now;
+                    db.SalesOrderLines.Add(item);
+
+                }
+                else
+                {
+                    var data = db.SalesOrderLines.Where(z => z.SalesOrderLineId == item.SalesOrderLineId).FirstOrDefault();
+                    data.Quantity = item.Quantity;
+                    data.Price = item.Price;
+                    data.TaxAmount = item.TaxAmount;
+                    data.DiscountAmount = item.DiscountAmount;
+                    data.Total = item.Total;
+                    data.SubTotal = item.SubTotal;
+                }
+                db.SaveChanges();
+            }
+            return Json("", JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public ActionResult NhanThanhToan(PaymentReceive item)
+        {
+            using (Models.VTEntities db = new Models.VTEntities())
+            {
+                item.PaymentDate = DateTime.Now;
+                db.PaymentReceives.Add(item);
                 db.SaveChanges();
             }
             return Json("", JsonRequestBehavior.AllowGet);

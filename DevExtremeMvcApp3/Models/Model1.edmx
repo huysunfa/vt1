@@ -205,12 +205,12 @@
             <PropertyRef Name="PaymentReceiveId" />
           </Key>
           <Property Name="PaymentReceiveId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="InvoiceId" Type="int" Nullable="false" />
-          <Property Name="IsFullPayment" Type="bit" Nullable="false" />
+          <Property Name="SalesOrderId" Type="int" Nullable="false" />
+          <Property Name="IsFullPayment" Type="bit" />
           <Property Name="PaymentAmount" Type="float" Nullable="false" />
           <Property Name="PaymentDate" Type="datetimeoffset" Precision="7" Nullable="false" />
           <Property Name="PaymentReceiveName" Type="nvarchar(max)" />
-          <Property Name="PaymentTypeId" Type="int" Nullable="false" />
+          <Property Name="PaymentTypeId" Type="int" />
         </EntityType>
         <EntityType Name="PaymentType">
           <Key>
@@ -629,7 +629,6 @@
           <EntitySet Name="Invoices" EntityType="VTModel.Invoice" />
           <EntitySet Name="InvoiceTypes" EntityType="VTModel.InvoiceType" />
           <EntitySet Name="NumberSequences" EntityType="VTModel.NumberSequence" />
-          <EntitySet Name="PaymentReceives" EntityType="VTModel.PaymentReceive" />
           <EntitySet Name="PaymentTypes" EntityType="VTModel.PaymentType" />
           <EntitySet Name="PaymentVouchers" EntityType="VTModel.PaymentVoucher" />
           <EntitySet Name="Products" EntityType="VTModel.Product" />
@@ -675,6 +674,7 @@
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
           </AssociationSet>
+          <EntitySet Name="PaymentReceives" EntityType="VTModel.PaymentReceive" />
         </EntityContainer>
         <EntityType Name="AspNetRoleClaim">
           <Key>
@@ -872,18 +872,6 @@
           <Property Name="Module" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="NumberSequenceName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Prefix" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="PaymentReceive">
-          <Key>
-            <PropertyRef Name="PaymentReceiveId" />
-          </Key>
-          <Property Name="PaymentReceiveId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="InvoiceId" Type="Int32" Nullable="false" />
-          <Property Name="IsFullPayment" Type="Boolean" Nullable="false" />
-          <Property Name="PaymentAmount" Type="Double" Nullable="false" />
-          <Property Name="PaymentDate" Type="DateTimeOffset" Nullable="false" Precision="7" />
-          <Property Name="PaymentReceiveName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PaymentTypeId" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="PaymentType">
           <Key>
@@ -1190,6 +1178,18 @@
           <End Type="VTModel.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="VTModel.AspNetUser" Role="AspNetUser" Multiplicity="*" />
         </Association>
+        <EntityType Name="PaymentReceive">
+          <Key>
+            <PropertyRef Name="PaymentReceiveId" />
+          </Key>
+          <Property Name="PaymentReceiveId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SalesOrderId" Type="Int32" Nullable="false" />
+          <Property Name="IsFullPayment" Type="Boolean" />
+          <Property Name="PaymentAmount" Type="Double" Nullable="false" />
+          <Property Name="PaymentDate" Type="DateTimeOffset" Nullable="false" Precision="7" />
+          <Property Name="PaymentReceiveName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PaymentTypeId" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1394,19 +1394,6 @@
                 <ScalarProperty Name="Module" ColumnName="Module" />
                 <ScalarProperty Name="LastNumber" ColumnName="LastNumber" />
                 <ScalarProperty Name="NumberSequenceId" ColumnName="NumberSequenceId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PaymentReceives">
-            <EntityTypeMapping TypeName="VTModel.PaymentReceive">
-              <MappingFragment StoreEntitySet="PaymentReceive">
-                <ScalarProperty Name="PaymentTypeId" ColumnName="PaymentTypeId" />
-                <ScalarProperty Name="PaymentReceiveName" ColumnName="PaymentReceiveName" />
-                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
-                <ScalarProperty Name="PaymentAmount" ColumnName="PaymentAmount" />
-                <ScalarProperty Name="IsFullPayment" ColumnName="IsFullPayment" />
-                <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
-                <ScalarProperty Name="PaymentReceiveId" ColumnName="PaymentReceiveId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1648,6 +1635,19 @@
               <ScalarProperty Name="Id" ColumnName="RoleId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="PaymentReceives">
+            <EntityTypeMapping TypeName="VTModel.PaymentReceive">
+              <MappingFragment StoreEntitySet="PaymentReceive">
+                <ScalarProperty Name="PaymentTypeId" ColumnName="PaymentTypeId" />
+                <ScalarProperty Name="PaymentReceiveName" ColumnName="PaymentReceiveName" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+                <ScalarProperty Name="PaymentAmount" ColumnName="PaymentAmount" />
+                <ScalarProperty Name="IsFullPayment" ColumnName="IsFullPayment" />
+                <ScalarProperty Name="SalesOrderId" ColumnName="SalesOrderId" />
+                <ScalarProperty Name="PaymentReceiveId" ColumnName="PaymentReceiveId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
