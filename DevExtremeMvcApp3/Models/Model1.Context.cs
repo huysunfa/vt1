@@ -42,7 +42,6 @@ namespace DevExtremeMvcApp3.Models
         public virtual DbSet<Invoice> Invoices { get; set; }
         public virtual DbSet<InvoiceType> InvoiceTypes { get; set; }
         public virtual DbSet<NumberSequence> NumberSequences { get; set; }
-        public virtual DbSet<PaymentReceive> PaymentReceives { get; set; }
         public virtual DbSet<PaymentType> PaymentTypes { get; set; }
         public virtual DbSet<PaymentVoucher> PaymentVouchers { get; set; }
         public virtual DbSet<Product> Products { get; set; }
@@ -60,5 +59,6 @@ namespace DevExtremeMvcApp3.Models
         public virtual DbSet<Vendor> Vendors { get; set; }
         public virtual DbSet<VendorType> VendorTypes { get; set; }
         public virtual DbSet<Warehouse> Warehouses { get; set; }
+        public virtual DbSet<PaymentReceive> PaymentReceives { get; set; }
     }
 }

@@ -1,0 +1,50 @@
+﻿<div class="demo-container">
+    <div id="chart-demo">
+        <div id="pie"></div>
+         
+    </div>
+</div>
+
+<script>
+    $.ajax({
+        type: "POST",
+        url: "/SalesOrderLines/ChartData",
+        data: {
+            ID:'@ViewBag.ID'
+        },
+        dataType: "json",
+        success: function (dataSource) {
+             var pieChart = $("#pie").dxPieChart({
+        palette: "Soft Pastel",
+        dataSource: dataSource,
+              type: "doughnut",
+  title: "Thống kê giá trị đơn hàng",
+        margin: {
+            bottom: 20
+        },
+        legend: {
+            visible: false
+        },
+        animation: {
+            enabled: false
+        },
+        resolveLabelOverlapping: "shift",
+        "export": {
+            enabled: true
+        },
+        series: [{
+            argumentField: "ProductName",
+            valueField: "Total",
+            label: {
+                visible: true,
+                customizeText: function(arg) {
+                    return arg.argumentText + " ( " + arg.percentText + ") "+arg.valueText+" VND";
+                }
+            }
+        }]
+    }).dxPieChart("instance");
+   
+        }
+    });
+    
+</script>

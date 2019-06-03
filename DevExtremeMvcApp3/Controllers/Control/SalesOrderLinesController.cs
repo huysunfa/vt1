@@ -17,11 +17,43 @@ namespace DevExtremeMvcApp3.Controllers.Control
             return View();
 
         }
+
+        public ActionResult Chart(int ID = 0)
+        {
+            ViewBag.ID = ID;
+            return PartialView();
+
+        }  public ActionResult NhanThanhToan(int ID = 0)
+        {
+            ViewBag.ID = ID;
+            return PartialView();
+
+        }
+        [HttpPost]
+        public ActionResult ChartData(int ID = 0)
+        {
+            using (Models.VTEntities db = new VTEntities())
+            {
+                string SQL = @"select t2.ProductName,ISNULL(SUM(Total),0) as Total from SalesOrderLine
+                                AS T1 INNER JOIN Product AS T2 ON T1.ProductId = T2.ProductId
+                                 where SalesOrderId = "+ ID + "group by t1.ProductId, t2.ProductName";
+                var data = db.Database.SqlQuery<PIE_CHART>(SQL).ToArray();
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+        public class PIE_CHART
+        {
+            public String ProductName { get; set; }
+            public Double Total { get; set; }
+        }
+
         public ActionResult Grid(int ID = 0)
         {
             ViewBag.ID = ID;
             using (Models.VTEntities db = new Models.VTEntities())
             {
+                updateSoTien(ID);
                 var data = db.SalesOrders.Where(z => z.SalesOrderId == ID).FirstOrDefault();
                 if (data == null)
                 {
@@ -30,7 +62,7 @@ namespace DevExtremeMvcApp3.Controllers.Control
                 ViewBag.SalesTypeId = db.SalesTypes.Where(z => z.SalesTypeId == data.SalesTypeId).Select(z => z.SalesTypeName).FirstOrDefault();
                 ViewBag.CustomerId = db.Customers.Where(z => z.CustomerId == data.CustomerId).Select(z => z.CustomerName).FirstOrDefault();
                 ViewBag.SalesOrderLines = db.SalesOrderLines.Where(z => z.SalesOrderId == data.SalesOrderId).ToList();
-                updateSoTien(ID);
+           //     ViewBag.CongNo =db.
                 return PartialView(data);
             }
         }
@@ -41,7 +73,7 @@ namespace DevExtremeMvcApp3.Controllers.Control
             {
                 var data = db.SalesOrderLines.AsNoTracking().Where(z => z.SalesOrderId == ID).ToList();
                 var item = db.SalesOrders.Where(z => z.SalesOrderId == ID).FirstOrDefault();
-                item.Amount = data.Sum(Z => Z.Amount);
+                item.Amount = data.Sum(Z => Z.Price);
                 item.Discount = data.Where(Z => Z.DiscountAmount.HasValue).Sum(Z => Z.Amount / 100 * Z.DiscountAmount.Value);
                 item.SubTotal = data.Where(Z => Z.SubTotal.HasValue).Sum(Z => Z.SubTotal.Value);
                 item.Tax = data.Where(Z => Z.TaxAmount.HasValue).Sum(Z => Z.Amount / 100 * Z.TaxAmount.Value);
@@ -72,8 +104,33 @@ namespace DevExtremeMvcApp3.Controllers.Control
         {
             using (Models.VTEntities db = new Models.VTEntities())
             {
-                item.DateUpdate = DateTime.Now;
-                db.SalesOrderLines.Add(item);
+                if (item.SalesOrderLineId == 0)
+                {
+
+                    item.DateUpdate = DateTime.Now;
+                    db.SalesOrderLines.Add(item);
+
+                }
+                else
+                {
+                    var data = db.SalesOrderLines.Where(z => z.SalesOrderLineId == item.SalesOrderLineId).FirstOrDefault();
+                    data.Quantity = item.Quantity;
+                    data.Price = item.Price;
+                    data.TaxAmount = item.TaxAmount;
+                    data.DiscountAmount = item.DiscountAmount;
+                    data.Total = item.Total;
+                    data.SubTotal = item.SubTotal;
+                }
+                db.SaveChanges();
+            }
+            return Json("", JsonRequestBehavior.AllowGet);
+        } [HttpPost]
+        public ActionResult NhanThanhToan(PaymentReceive item)
+        {
+            using (Models.VTEntities db = new Models.VTEntities())
+            {
+                item.PaymentDate = DateTime.Now;
+                db.PaymentReceives.Add(item);
                 db.SaveChanges();
             }
             return Json("", JsonRequestBehavior.AllowGet);

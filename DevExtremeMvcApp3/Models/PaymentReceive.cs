@@ -15,11 +15,11 @@ namespace DevExtremeMvcApp3.Models
     public partial class PaymentReceive
     {
         public int PaymentReceiveId { get; set; }
-        public int InvoiceId { get; set; }
-        public bool IsFullPayment { get; set; }
+        public int SalesOrderId { get; set; }
+        public Nullable<bool> IsFullPayment { get; set; }
         public double PaymentAmount { get; set; }
         public System.DateTimeOffset PaymentDate { get; set; }
         public string PaymentReceiveName { get; set; }
-        public int PaymentTypeId { get; set; }
+        public Nullable<int> PaymentTypeId { get; set; }
     }
 }

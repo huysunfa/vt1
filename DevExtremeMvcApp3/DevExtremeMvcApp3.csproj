@@ -288,6 +288,8 @@
     <Content Include="Views\SalesOrderLines\Index.cshtml" />
     <Content Include="Views\SalesOrderLines\Create.cshtml" />
     <Content Include="Views\SalesOrderLines\Grid.cshtml" />
+    <Content Include="Views\SalesOrderLines\Chart.cshtml" />
+    <Content Include="Views\SalesOrderLines\NhanThanhToan.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
