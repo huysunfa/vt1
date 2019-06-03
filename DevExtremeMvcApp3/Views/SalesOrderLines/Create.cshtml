@@ -60,6 +60,7 @@
                 @Number("Amount", "Gía nhập (Vnđ)")
                 @Number("Price", "Gía bán (Vnđ)")
                 @Number("SubTotal", "Phụ phí (Vnđ)")
+                @Number("DiscountAmount", "Chiết khấu")
                 @Number("TaxAmount", "Thuế (%)")
                 @Number("Total", "Tổng tiền (Vnđ)")
                 @Text("Remark", "md12", "[]")
@@ -162,7 +163,7 @@
 
     })
 
-    if (app.item.SalesOrderLineId!=0) {
+    if (app.item.SalesOrderLineId==0) {
           app.item.Price = 0;
     app.item.TaxAmount = 0;
     app.item.SubTotal = 0;

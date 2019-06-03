@@ -1,7 +1,7 @@
 ﻿@model DevExtremeMvcApp3.Models.SalesOrder
 @{
     var SalesOrderLines = (List<DevExtremeMvcApp3.Models.SalesOrderLine>)ViewBag.SalesOrderLines;
-
+    var NO = 1;
     DevExtremeMvcApp3.Models.VTEntities db = new VTEntities();
 }
 <style>
@@ -54,26 +54,26 @@
                         <b>Ngày đặt hàng</b> <a class="float-right">@Model.OrderDate.ToString("dd/MM/yyyy")</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Tổng Số tiền</b> <a class="float-right">@Model.Amount</a>
+                        <b>Tổng Số tiền</b> <a class="float-right"><b class="Tien">@Model.Amount.ToString("#,###")</b> VND</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Tổng Chiết khấu</b> <a class="float-right">@Model.Discount</a>
+                        <b>Tổng Chiết khấu</b> <a class="float-right"><b class="Tien">@Model.Discount.ToString("#,###")</b> VND</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Tổng Phí vận chuyển</b> <a class="float-right">@Model.Freight</a>
+                        <b>Tổng Phí vận chuyển</b> <a class="float-right"><b class="Tien">@Model.Freight.ToString("#,###")</b> VND</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Tổng Phí phát sinh</b> <a class="float-right">@Model.SubTotal</a>
+                        <b>Tổng Phí phát sinh</b> <a class="float-right"><b class="Tien">@Model.SubTotal.ToString("#,###")</b> VND</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Tổng Thuế</b> <a class="float-right">@Model.Tax</a>
+                        <b>Tổng Thuế</b> <a class="float-right"><b class="Tien">@Model.Tax.ToString("#,###")</b> VND</a>
                     </li>
 
                     <li class="list-group-item">
                         <b>Ghi chú</b> <a class="float-right">@Model.Remarks</a>
                     </li>
                     <li class="list-group-item bg-danger text-white">
-                        <b>Tổng giá trị</b><br /> <b class="float-right " style="font-size:20px">@Model.Total.ToString("#,###") VND</b><br />
+                        <b>Tổng giá trị </b><br /> <b class="float-right " style="font-size:20px">@Model.Total.ToString("#,###") VND</b><br />
                         <p style="margin-bottom:0">  <small>@DevExtremeMvcApp3.Extentions.TienTe.DocTien(Model.Total)</small></p>
                     </li>
                 </ul>
@@ -97,28 +97,29 @@
             <div class="card-body">
                 <div class="tab-content">
                     <div class="active tab-pane table-responsive" id="activity">
+ 
+
                         <table class="table" id="DS_DH">
                             <tr>
                                 <th><a onclick="Create('@Model.SalesOrderId')" class="btn btn-sm text-primary btn-outline-primary">Thêm vật tư</a></th>
                                 <th colspan="10">Danh sách vật tư trong đơn hàng</th>
                             </tr>
                             <tr>
-                                <th>Thao tác</th>
+                                <th style="width:70PX;min-width:0!important">Thao tác</th>
+                                <th style="width:60PX;min-width:0!important">STT</th>
                                 <th>Vật tư</th>
                                 <th>Số lượng</th>
                                 <th>Giá nhập</th>
                                 <th>Tổng tiền</th>
+
                                 <th>
-                                    Giảm giá
-                                </th>
-                                <th>
-                                    Chiết khấu
+                                    Chiết khấu (%)
                                 </th>
                                 <th>
                                     Giá bán
                                 </th>
                                 <th>Phụ phí</th>
-                                <th>Thuế</th>
+                                <th>Thuế (%)</th>
                                 <th>Ghi chú</th>
                             </tr>
                             <tbody>
@@ -126,19 +127,20 @@
                                 {
                                     var sp = db.Products.Where(z => z.ProductId == item.ProductId).Select(z => z.ProductName).FirstOrDefault();
                                     <tr>
-                                        <td>
+                                        <td style="width:70PX;min-width:0!important">
                                             <a onclick="Create('@item.SalesOrderId','@item.SalesOrderLineId')" class="btn-sm    btn-outline-info  text-info "><i class="fa fa-edit"></i></a>
                                             <a data-ID="@item.SalesOrderLineId" class="btn-sm Delete  btn-outline-danger   text-danger "><i class="fa fa-trash"></i></a>
+
                                         </td>
+                                        <td style="width:50PX">  @(NO++)  </td>
                                         <td>@sp</td>
                                         <td>@item.Quantity</td>
-                                        <td>@item.Amount</td>
-                                        <td>@item.Total</td>
+                                        <td>@item.Amount.ToString("#,###")</td>
+                                        <td>@item.Total.ToString("#,###")</td>
 
                                         <td>@item.DiscountAmount</td>
-                                        <td>@item.DiscountPercentage</td>
-                                        <td>@item.Price</td>
-                                        <td>@item.SubTotal</td>
+                                        <td>@item.Price.ToString("#,###")</td>
+                                        <td>@(item.SubTotal.HasValue ? item.SubTotal.Value.ToString("#,###") : "")</td>
                                         <td>@item.TaxAmount</td>
                                         <td>@item.Description</td>
 
@@ -298,12 +300,9 @@
                             </div>
                         </form>
                     </div>
-                    <!-- /.tab-pane -->
                 </div>
-                <!-- /.tab-content -->
             </div><!-- /.card-body -->
         </div>
-        <!-- /.nav-tabs-custom -->
     </div>
     <!-- /.col -->
 </div>
@@ -343,7 +342,7 @@
         $('#myModal_ThemVatTu').modal("show");
     }
     $(".Delete").click(function (e) {
-         var r = confirm("Bạn có chắc chắn muốn xóa dữ liệu này");
+        var r = confirm("Bạn có chắc chắn muốn xóa dữ liệu này");
         if (r == true) {
             var ID = $(this).attr("data-ID");
             $.ajax({

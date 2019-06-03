@@ -57,7 +57,7 @@ namespace DevExtremeMvcApp3 {
             // NOTE: see the available theme list here: http://js.devexpress.com/Documentation/Guide/Themes/Predefined_Themes/                    
             styleBundle
                 .Include("~/Content/dx.common.css")
-                .Include("~/Content/dx.material.teal.light.compact.css");
+                .Include("~/Content/dx.softblue.compact.css");
 
 
             bundles.Add(scriptBundle);

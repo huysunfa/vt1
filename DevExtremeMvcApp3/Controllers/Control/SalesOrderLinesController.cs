@@ -22,6 +22,7 @@ namespace DevExtremeMvcApp3.Controllers.Control
             ViewBag.ID = ID;
             using (Models.VTEntities db = new Models.VTEntities())
             {
+                updateSoTien(ID);
                 var data = db.SalesOrders.Where(z => z.SalesOrderId == ID).FirstOrDefault();
                 if (data == null)
                 {
@@ -30,7 +31,6 @@ namespace DevExtremeMvcApp3.Controllers.Control
                 ViewBag.SalesTypeId = db.SalesTypes.Where(z => z.SalesTypeId == data.SalesTypeId).Select(z => z.SalesTypeName).FirstOrDefault();
                 ViewBag.CustomerId = db.Customers.Where(z => z.CustomerId == data.CustomerId).Select(z => z.CustomerName).FirstOrDefault();
                 ViewBag.SalesOrderLines = db.SalesOrderLines.Where(z => z.SalesOrderId == data.SalesOrderId).ToList();
-                updateSoTien(ID);
                 return PartialView(data);
             }
         }
@@ -41,10 +41,10 @@ namespace DevExtremeMvcApp3.Controllers.Control
             {
                 var data = db.SalesOrderLines.AsNoTracking().Where(z => z.SalesOrderId == ID).ToList();
                 var item = db.SalesOrders.Where(z => z.SalesOrderId == ID).FirstOrDefault();
-                item.Amount = data.Sum(Z => Z.Amount);
-                item.Discount = data.Where(Z => Z.DiscountAmount.HasValue).Sum(Z => Z.Amount / 100 * Z.DiscountAmount.Value);
-                item.SubTotal = data.Where(Z => Z.SubTotal.HasValue).Sum(Z => Z.SubTotal.Value);
-                item.Tax = data.Where(Z => Z.TaxAmount.HasValue).Sum(Z => Z.Amount / 100 * Z.TaxAmount.Value);
+                item.Amount = data.Sum(Z => Z.Price*Z.Quantity);
+                item.Discount = data.Where(Z => Z.DiscountAmount.HasValue).Sum(Z => (Z.Amount / 100 * Z.DiscountAmount.Value) * Z.Quantity);
+                item.SubTotal = data.Where(Z => Z.SubTotal.HasValue).Sum(Z => Z.SubTotal.Value );
+                item.Tax = data.Where(Z => Z.TaxAmount.HasValue).Sum(Z =>(Z.Amount *Z.Quantity) / 100 * Z.TaxAmount.Value);
                 item.Total = item.Amount - item.Discount + item.SubTotal + item.Tax;
                 db.SaveChanges();
             }
