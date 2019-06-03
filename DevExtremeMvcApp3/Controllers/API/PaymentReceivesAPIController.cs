@@ -21,9 +21,9 @@ namespace DevExtremeMvcApp3.Models.Controllers
 
         [HttpGet]
         public HttpResponseMessage Get(DataSourceLoadOptions loadOptions) {
-            var paymentreceives = _context.PaymentReceives.Select(i => new {
+            var paymentreceives = _context.PaymentReceives.OrderByDescending(z=>z.PaymentReceiveId).Select(i => new {
                 i.PaymentReceiveId,
-                i.InvoiceId,
+                i.SalesOrderId,
                 i.IsFullPayment,
                 i.PaymentAmount,
                 i.PaymentDate,
@@ -80,7 +80,7 @@ namespace DevExtremeMvcApp3.Models.Controllers
 
         private void PopulateModel(PaymentReceive model, IDictionary values) {
             string PAYMENT_RECEIVE_ID = nameof(PaymentReceive.PaymentReceiveId);
-            string INVOICE_ID = nameof(PaymentReceive.InvoiceId);
+            string SalesOrderId = nameof(PaymentReceive.SalesOrderId);
             string IS_FULL_PAYMENT = nameof(PaymentReceive.IsFullPayment);
             string PAYMENT_AMOUNT = nameof(PaymentReceive.PaymentAmount);
             string PAYMENT_DATE = nameof(PaymentReceive.PaymentDate);
@@ -91,8 +91,8 @@ namespace DevExtremeMvcApp3.Models.Controllers
                 model.PaymentReceiveId = Convert.ToInt32(values[PAYMENT_RECEIVE_ID]);
             }
 
-            if(values.Contains(INVOICE_ID)) {
-                model.InvoiceId = Convert.ToInt32(values[INVOICE_ID]);
+            if(values.Contains(SalesOrderId)) {
+                model.SalesOrderId = Convert.ToInt32(values[SalesOrderId]);
             }
 
             if(values.Contains(IS_FULL_PAYMENT)) {

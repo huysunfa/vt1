@@ -74,8 +74,20 @@
                     </li>
                     <li class="list-group-item bg-danger text-white">
                         <b>Tổng giá trị</b><br /> <b class="float-right " style="font-size:20px">@Model.Total.ToString("#,###") VND</b><br />
-                        <p style="margin-bottom:0">  <small>@DevExtremeMvcApp3.Extentions.TienTe.DocTien(Model.Total)</small></p>
+                        @*<p style="margin-bottom:0">  <small>@DevExtremeMvcApp3.Extentions.TienTe.DocTien(Model.Total)</small></p>*@
                     </li>
+
+                    <li class="list-group-item  bg-success text-white">
+                        <b>Đã thanh toán</b> <a style="font-size:20px" class="float-right">@ViewBag.DaThanhToan VND</a>
+                        
+                    </li>  
+                    <li class="list-group-item  bg-warning text-white">
+                         <b>Còn lại</b> <a style="font-size:20px" class="float-right">@ViewBag.ConLai VND</a>
+                     </li>  
+                    <li class="list-group-item">
+                         <b>Công nợ</b> <a style="font-size:20px" class="float-right">@ViewBag.CongNo VND</a>
+                    </li>
+
                 </ul>
 
                 <a href="#" onclick="NhanThanhToan('@Model.SalesOrderId')" class="btn btn-primary btn-block"><b>Nhận thanh toán</b></a>

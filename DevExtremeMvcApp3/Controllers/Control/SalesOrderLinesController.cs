@@ -23,7 +23,8 @@ namespace DevExtremeMvcApp3.Controllers.Control
             ViewBag.ID = ID;
             return PartialView();
 
-        }  public ActionResult NhanThanhToan(int ID = 0)
+        }
+        public ActionResult NhanThanhToan(int ID = 0)
         {
             ViewBag.ID = ID;
             return PartialView();
@@ -36,7 +37,7 @@ namespace DevExtremeMvcApp3.Controllers.Control
             {
                 string SQL = @"select t2.ProductName,ISNULL(SUM(Total),0) as Total from SalesOrderLine
                                 AS T1 INNER JOIN Product AS T2 ON T1.ProductId = T2.ProductId
-                                 where SalesOrderId = "+ ID + "group by t1.ProductId, t2.ProductName";
+                                 where SalesOrderId = " + ID + "group by t1.ProductId, t2.ProductName";
                 var data = db.Database.SqlQuery<PIE_CHART>(SQL).ToArray();
                 return Json(data, JsonRequestBehavior.AllowGet);
             }
@@ -62,7 +63,19 @@ namespace DevExtremeMvcApp3.Controllers.Control
                 ViewBag.SalesTypeId = db.SalesTypes.Where(z => z.SalesTypeId == data.SalesTypeId).Select(z => z.SalesTypeName).FirstOrDefault();
                 ViewBag.CustomerId = db.Customers.Where(z => z.CustomerId == data.CustomerId).Select(z => z.CustomerName).FirstOrDefault();
                 ViewBag.SalesOrderLines = db.SalesOrderLines.Where(z => z.SalesOrderId == data.SalesOrderId).ToList();
-           //     ViewBag.CongNo =db.
+                var LDaThanhToan = db.PaymentReceives.Where(z => z.SalesOrderId == ID).ToList();
+                Double DaThanhToan = 0;
+                if (LDaThanhToan.Count != 0)
+                {
+                    DaThanhToan = LDaThanhToan.Sum(z => z.PaymentAmount);
+
+                }
+                ViewBag.ConLai = (data.Total - DaThanhToan).ToString("#,###");
+                ViewBag.DaThanhToan = DaThanhToan.ToString("#,###");
+                ViewBag.CongNo = db.Database.SqlQuery<Double>("select isnull(Total-PaymentAmount,0) AS CongNo from SalesOrder as t1 left join (select SalesOrderId,SUM(PaymentAmount) AS PaymentAmount from PaymentReceive  WHERE PaymentAmount>0  group by SalesOrderId ) as t2 on t1.SalesOrderId = t2.SalesOrderId where CustomerId = " + data.CustomerId + " and T1.SalesOrderId != " + data.SalesOrderId + " ").FirstOrDefault().ToString("#,###");
+                ViewBag.ConLai = (ViewBag.ConLai == "" ? "0" : ViewBag.ConLai);
+                ViewBag.DaThanhToan = (ViewBag.DaThanhToan == "" ? "0" : ViewBag.DaThanhToan);
+                ViewBag.CongNo = (ViewBag.CongNo == "" ? "0" : ViewBag.CongNo);
                 return PartialView(data);
             }
         }
@@ -124,7 +137,8 @@ namespace DevExtremeMvcApp3.Controllers.Control
                 db.SaveChanges();
             }
             return Json("", JsonRequestBehavior.AllowGet);
-        } [HttpPost]
+        }
+        [HttpPost]
         public ActionResult NhanThanhToan(PaymentReceive item)
         {
             using (Models.VTEntities db = new Models.VTEntities())

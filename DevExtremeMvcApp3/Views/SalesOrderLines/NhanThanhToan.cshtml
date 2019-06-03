@@ -2,7 +2,7 @@
 
 
 
-@helper Text(string Name, string Label,  string size = "md3", string rules = "NotEmpty")
+@helper Text(string Name, string Label, string size = "md3", string rules = "NotEmpty")
 {
     <v-flex xs12 @size>
         <v-text-field v-model="item.@Name" :rules="@rules" outline label="@Label" placeholder=" "></v-text-field>
@@ -11,7 +11,7 @@
 @helper Number(string Name, string Label, string size = "md3", string rules = "[]")
 {
     <v-flex xs12 @size>
-        <v-text-field type="number" v-model="item.@Name" :hide-details="true" :rules="@rules" prepend-icon="chat" outline label="@Label" placeholder=" "></v-text-field>
+        <v-text-field type="number" v-model="item.@Name" :hide-details="true" autofocus  :rules="NotEmpty"  prepend-icon="chat" outline label="@Label" placeholder=" "></v-text-field>
     </v-flex>
 }
 
@@ -43,7 +43,7 @@
             <div class="col-12 col-md-11 row">
 
                 @Number("PaymentAmount", "Số tiền thanh toán")
-                @Text("PaymentReceiveName", "Tên nhận thanh toán","", "[]")
+                @Text("PaymentReceiveName", "Tên nhận thanh toán", "", "[]")
             </div>
             <v-btn @@click="submit" :disabled="!valid" color="info  " style="float:right">
                 <v-icon dark>save</v-icon> &nbsp;
@@ -54,6 +54,48 @@
         </v-form>
     </v-app>
 </div>
+
+ 
+@(Html.DevExtreme().DataGrid<DevExtremeMvcApp3.Models.PaymentReceive>()
+.DataSource(ds => ds.WebApi()
+.RouteName("PaymentReceivesAPIApi")
+.LoadAction("Get")
+ .DeleteAction("Delete")
+.Key("PaymentReceiveId")
+)
+.RemoteOperations(true)
+.Columns(columns =>
+{
+
+
+ 
+ 
+columns.AddFor(m => m.PaymentAmount).Caption("Số tiền");
+
+columns.AddFor(m => m.PaymentDate).DataType(GridColumnDataType.Date).Caption("Ngày nhận thanh toán");
+
+columns.AddFor(m => m.PaymentReceiveName).Caption("Tên nhận thanh toán");
+
+ }).Editing(e => e.Mode(GridEditMode.Popup)
+ .AllowDeleting(true)
+).Paging(p => p.PageSize(10))
+.FilterRow(f => f.Visible(true))
+.HeaderFilter(f => f.Visible(true))
+.GroupPanel(p => p.Visible(false))
+.Grouping(g => g.AutoExpandAll(false))
+.RemoteOperations(true)
+.ColumnMinWidth(150).ColumnResizingMode(ColumnResizingMode.Widget).AllowColumnResizing(true).Scrolling(z => z.ScrollByContent(true))
+.Summary(s => s
+.TotalItems(totalItems =>
+{
+totalItems.AddFor(m => m.PaymentReceiveId).SummaryType(SummaryType.Count);
+})
+.GroupItems(groupItems =>
+{
+groupItems.Add().SummaryType(SummaryType.Count);
+})
+)
+)
 <script>
 
     var app = new Vue({
@@ -127,5 +169,7 @@
 
     })
     app.item.SalesOrderId = '@ViewBag.ID';
-
+    $('#myModal_ThemVatTu').on('hidden.bs.modal', function (e) {
+        loadGrid();
+})
 </script>
